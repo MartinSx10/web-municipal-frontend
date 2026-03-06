@@ -1,0 +1,131 @@
+<div class="max-w-4xl mx-auto p-6">
+  <a routerLink="/noticias" class="text-sm text-blue-900 underline">← Volver</a>
+
+  <!-- DETALLE -->
+  <ng-container *ngIf="(item$ | async) as item; else loadingTpl">
+    <div *ngIf="item; else notFoundTpl" class="bg-white rounded-2xl shadow p-6 mt-4">
+
+      <!-- Imagen -->
+      <div class="relative" *ngIf="item.coverUrl">
+        <img
+          [src]="item.coverUrl"
+          class="w-full h-72 md:h-80 object-cover rounded-xl"
+          alt="Imagen de la noticia"
+          loading="lazy"
+        />
+        <div class="absolute inset-0 rounded-xl bg-gradient-to-t from-black/35 to-transparent"></div>
+      </div>
+
+      <!-- Meta -->
+      <div class="flex items-center justify-between gap-4 flex-wrap mt-5">
+        <p class="text-xs text-gray-500">{{ item.publishedAt | date:'dd/MM/yyyy' }}</p>
+        <span class="text-xs bg-blue-50 text-blue-900 px-3 py-1 rounded-full">Comunicado</span>
+      </div>
+
+      <!-- Título -->
+      <h1 class="text-3xl font-bold mt-3">{{ item.title }}</h1>
+
+      <!-- Contenido -->
+      <div class="mt-5 text-gray-800 leading-relaxed whitespace-pre-line">
+        {{ item.content }}
+      </div>
+
+      <!-- Acciones -->
+      <div class="mt-6 flex gap-3 flex-wrap">
+        <button
+          type="button"
+          class="px-4 py-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-sm"
+          (click)="copyLink()"
+        >
+          Copiar link
+        </button>
+
+        <a
+          class="px-4 py-2 rounded-lg bg-blue-900 text-white hover:opacity-90 text-sm"
+          routerLink="/noticias"
+        >
+          Ver más noticias
+        </a>
+      </div>
+
+      <!-- OTRAS NOTICIAS (solo si el item existe) -->
+      <section class="mt-10">
+        <div class="flex items-end justify-between gap-4">
+          <div>
+            <h2 class="text-lg font-bold">Otras noticias</h2>
+            <p class="text-gray-600 text-sm mt-1">También te puede interesar.</p>
+          </div>
+
+          <a routerLink="/noticias" class="text-sm font-medium text-blue-900 underline">
+            Ver todas
+          </a>
+        </div>
+
+        <ng-container *ngIf="(related$ | async) as related; else relatedLoadingTpl">
+          <div *ngIf="related.length === 0" class="text-gray-600 mt-6">
+            No hay más noticias por ahora.
+          </div>
+
+          <div *ngIf="related.length > 0" class="grid md:grid-cols-3 gap-6 mt-6">
+            <article *ngFor="let n of related" class="bg-white rounded-xl shadow p-5 transition hover:shadow-lg">
+              <img
+                *ngIf="n.coverUrl"
+                [src]="n.coverUrl"
+                class="h-32 w-full object-cover rounded-lg mb-3"
+                loading="lazy"
+                [alt]="'Imagen de ' + (n.title || 'noticia')"
+              />
+              <div *ngIf="!n.coverUrl" class="h-32 w-full bg-gray-200 rounded-lg mb-3"></div>
+
+              <p class="text-xs text-gray-500">{{ n.publishedAt | date:'dd/MM/yyyy' }}</p>
+              <h3 class="text-base font-semibold mt-1">{{ n.title }}</h3>
+
+              <p
+                class="text-gray-600 text-sm mt-2 overflow-hidden text-ellipsis"
+                style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;"
+              >
+                {{ n.excerpt }}
+              </p>
+
+              <a class="inline-block mt-4 text-sm font-medium text-blue-900 underline"
+                 [routerLink]="['/noticias', n.slug]">
+                Ver detalle
+              </a>
+            </article>
+          </div>
+        </ng-container>
+
+        <ng-template #relatedLoadingTpl>
+          <div class="grid md:grid-cols-3 gap-6 mt-6">
+            <div class="bg-white rounded-xl shadow p-5 animate-pulse" *ngFor="let _ of [1,2,3]">
+              <div class="h-32 w-full bg-gray-200 rounded-lg mb-3"></div>
+              <div class="h-3 w-24 bg-gray-200 rounded mb-2"></div>
+              <div class="h-5 w-3/4 bg-gray-200 rounded mb-3"></div>
+              <div class="h-4 w-full bg-gray-200 rounded"></div>
+            </div>
+          </div>
+        </ng-template>
+      </section>
+
+    </div>
+  </ng-container>
+
+  <!-- Templates -->
+  <ng-template #loadingTpl>
+    <div class="bg-white rounded-2xl shadow p-6 mt-4 animate-pulse">
+      <div class="h-72 w-full bg-gray-200 rounded-xl"></div>
+      <div class="h-4 w-24 bg-gray-200 rounded mt-5"></div>
+      <div class="h-8 w-3/4 bg-gray-200 rounded mt-3"></div>
+      <div class="h-4 w-full bg-gray-200 rounded mt-5"></div>
+      <div class="h-4 w-5/6 bg-gray-200 rounded mt-2"></div>
+      <div class="h-4 w-2/3 bg-gray-200 rounded mt-2"></div>
+    </div>
+  </ng-template>
+
+  <ng-template #notFoundTpl>
+    <div class="bg-white rounded-2xl shadow p-6 mt-4">
+      <h2 class="text-xl font-semibold">Noticia no encontrada</h2>
+      <p class="text-gray-600 mt-2">La URL puede estar mal o la noticia no existe.</p>
+    </div>
+  </ng-template>
+</div>

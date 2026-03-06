@@ -1,0 +1,115 @@
+<div class="max-w-4xl mx-auto px-6 py-10">
+  <!-- Volver -->
+  <div class="flex items-center justify-between gap-4 flex-wrap">
+    <a routerLink="/turismo" class="text-sm font-medium text-blue-900 underline">
+      ← Volver a Turismo
+    </a>
+
+    <button
+      type="button"
+      (click)="copyLink()"
+      class="px-4 py-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-sm"
+      title="Copiar link"
+    >
+      Copiar link
+    </button>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMsg" class="mt-6 bg-red-50 border border-red-100 text-red-700 rounded-xl p-4">
+    {{ errorMsg }}
+  </div>
+
+  <!-- Detalle -->
+  <ng-container *ngIf="(item$ | async) as item; else loadingTpl">
+    <ng-container *ngIf="item; else notFoundTpl">
+      <article class="bg-white rounded-2xl shadow p-6 mt-6">
+
+        <!-- Imagen -->
+        <div class="relative" *ngIf="item.coverUrl">
+          <img
+            [src]="item.coverUrl"
+            class="w-full h-72 md:h-80 object-cover rounded-xl"
+            alt="Imagen del lugar"
+            loading="lazy"
+          />
+          <div class="absolute inset-0 rounded-xl bg-gradient-to-t from-black/35 to-transparent"></div>
+        </div>
+
+        <!-- Meta -->
+        <div class="flex items-center justify-between gap-4 flex-wrap mt-5">
+          <span class="text-xs bg-blue-50 text-blue-900 px-3 py-1 rounded-full">
+            {{ categoryUi(item.category) }}
+          </span>
+
+          <a
+            *ngIf="item.mapsUrl"
+            class="text-sm font-medium text-blue-900 underline"
+            [href]="item.mapsUrl"
+            target="_blank"
+            rel="noopener"
+          >
+            Ver en Google Maps
+          </a>
+        </div>
+
+        <!-- Título -->
+        <h1 class="text-3xl font-bold mt-3">{{ item.title }}</h1>
+
+        <!-- Excerpt -->
+        <p *ngIf="item.excerpt" class="text-gray-600 mt-3">
+          {{ item.excerpt }}
+        </p>
+
+        <!-- Descripción completa -->
+        <div class="mt-6 text-gray-800 leading-relaxed whitespace-pre-line">
+          {{ item.description }}
+        </div>
+
+        <!-- Acciones -->
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a
+            routerLink="/contacto"
+            class="px-5 py-3 rounded-lg bg-blue-900 text-white hover:opacity-90 text-sm font-medium"
+          >
+            Consultar
+          </a>
+
+          <a
+            *ngIf="item.mapsUrl"
+            [href]="item.mapsUrl"
+            target="_blank"
+            rel="noopener"
+            class="px-5 py-3 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-sm font-medium"
+          >
+            Ver mapa
+          </a>
+        </div>
+      </article>
+    </ng-container>
+  </ng-container>
+
+  <!-- Loading -->
+  <ng-template #loadingTpl>
+    <div class="bg-white rounded-2xl shadow p-6 mt-6 animate-pulse">
+      <div class="h-72 w-full bg-gray-200 rounded-xl"></div>
+      <div class="h-4 w-24 bg-gray-200 rounded mt-5"></div>
+      <div class="h-8 w-3/4 bg-gray-200 rounded mt-3"></div>
+      <div class="h-4 w-full bg-gray-200 rounded mt-5"></div>
+      <div class="h-4 w-5/6 bg-gray-200 rounded mt-2"></div>
+      <div class="h-4 w-2/3 bg-gray-200 rounded mt-2"></div>
+    </div>
+  </ng-template>
+
+  <!-- Not found -->
+  <ng-template #notFoundTpl>
+    <div class="bg-white rounded-2xl shadow p-6 mt-6">
+      <h2 class="text-xl font-semibold">Lugar no encontrado</h2>
+      <p class="text-gray-600 mt-2">La URL puede estar mal o el lugar no existe.</p>
+
+      <a routerLink="/turismo" class="inline-block mt-4 text-sm font-medium text-blue-900 underline">
+        Volver a Turismo
+      </a>
+    </div>
+  </ng-template>
+</div>

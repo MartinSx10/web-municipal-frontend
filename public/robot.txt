@@ -1,0 +1,4 @@
+User -agent: *
+Allow: /
+sitemap:
+https://TU-DOMINIO_O_VERCEL.app/sitemap.xml

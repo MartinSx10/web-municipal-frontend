@@ -1,0 +1,185 @@
+<section class="max-w-6xl mx-auto px-6 py-10">
+  <!-- Header -->
+  <div class="flex items-end justify-between gap-4 flex-wrap">
+    <div>
+      <h1 class="text-3xl font-bold">Contacto</h1>
+      <p class="text-gray-600 mt-2">
+        Estamos para ayudarte. Escribinos por WhatsApp o acercate a la municipalidad.
+      </p>
+    </div>
+
+    <a routerLink="/" class="text-sm font-medium text-blue-900 underline">
+      Volver al inicio
+    </a>
+  </div>
+
+  <div class="grid lg:grid-cols-2 gap-8 mt-8">
+    <!-- Info -->
+    <div class="bg-white rounded-2xl shadow p-6">
+      <h2 class="text-xl font-semibold">Información</h2>
+      <p class="text-gray-600 mt-2">Canales oficiales de atención.</p>
+
+      <div class="mt-6 space-y-4">
+        <div class="flex items-start gap-3">
+          <span class="text-xl">📍</span>
+          <div>
+            <p class="font-medium">Dirección</p>
+            <p class="text-gray-600 text-sm">Ulapes – La Rioja, Av. San Martín s/n</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <span class="text-xl">🕒</span>
+          <div>
+            <p class="font-medium">Horario</p>
+            <p class="text-gray-600 text-sm">Lunes a Viernes — 08:00 a 13:00</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <span class="text-xl">📞</span>
+          <div>
+            <p class="font-medium">Teléfono</p>
+            <p class="text-gray-600 text-sm">(Reemplazar) +54 3800 000000</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <span class="text-xl">✉️</span>
+          <div>
+            <p class="font-medium">Email</p>
+            <p class="text-gray-600 text-sm">contacto@municipio.gob.ar</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a
+          href="tel:+543800000000"
+          class="px-4 py-2 rounded-lg bg-blue-900 text-white hover:opacity-90 text-sm"
+        >
+          Llamar
+        </a>
+
+        <a
+          href="mailto:contacto@municipio.gob.ar"
+          class="px-4 py-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-sm"
+        >
+          Enviar email
+        </a>
+      </div>
+    </div>
+
+    <!-- WhatsApp Form (sin backend) -->
+    <div class="bg-white rounded-2xl shadow p-6">
+      <h2 class="text-xl font-semibold">Enviar WhatsApp</h2>
+      <p class="text-gray-600 mt-2">
+        Completá los datos y se abrirá WhatsApp con el mensaje listo.
+      </p>
+
+      <!-- ✅ CAMBIAR ESTE NÚMERO (formato internacional sin + ni espacios) -->
+      <!-- Ej: Argentina +54 9 380 4123456 => 5493804123456 -->
+      <ng-container *ngIf="true as _">
+        <form
+          class="mt-6 space-y-4"
+          onsubmit="event.preventDefault(); 
+            const WHATSAPP_NUMBER='543821408851';
+            const nombre=(document.getElementById('c-nombre')||{}).value||'';
+            const telefono=(document.getElementById('c-tel')||{}).value||'';
+            const asunto=(document.getElementById('c-asunto')||{}).value||'';
+            const mensaje=(document.getElementById('c-msg')||{}).value||'';
+            const texto=`Hola! Soy ${nombre}%0A`+
+              (telefono?`Tel: ${telefono}%0A`:'')+
+              (asunto?`Asunto: ${asunto}%0A`:'')+
+              `Mensaje: ${mensaje}`;
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${texto}`, '_blank');
+          "
+        >
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="text-sm font-medium">Nombre</label>
+              <input
+                id="c-nombre"
+                type="text"
+                required
+                placeholder="Tu nombre"
+                class="mt-1 w-full bg-white border border-gray-200 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-green-200"
+              />
+            </div>
+
+            <div>
+              <label class="text-sm font-medium">Teléfono (opcional)</label>
+              <input
+                id="c-tel"
+                type="text"
+                placeholder="+54..."
+                class="mt-1 w-full bg-white border border-gray-200 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-green-200"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-medium">Asunto</label>
+            <input
+              id="c-asunto"
+              type="text"
+              placeholder="Ej: Reclamo / Consulta / Turnos"
+              class="mt-1 w-full bg-white border border-gray-200 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-green-200"
+            />
+          </div>
+
+          <div>
+            <label class="text-sm font-medium">Mensaje</label>
+            <textarea
+              id="c-msg"
+              rows="5"
+              required
+              placeholder="Escribí tu mensaje..."
+              class="mt-1 w-full bg-white border border-gray-200 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-green-200"
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full sm:w-auto px-5 py-3 rounded-lg bg-green-600 text-white hover:bg-green-700 font-medium"
+          >
+            Enviar por WhatsApp
+          </button>
+
+          <p class="text-xs text-gray-500 mt-2">
+            * Se abre WhatsApp Web o la app del celular con el mensaje prearmado.
+          </p>
+        </form>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- Mapa (placeholder) -->
+  <div class="bg-white rounded-2xl shadow p-6 mt-8">
+    <div class="flex items-end justify-between gap-4 flex-wrap">
+      <div>
+        <h2 class="text-xl font-semibold">Ubicación</h2>
+        <p class="text-gray-600 mt-1">Encontranos en el mapa.</p>
+      </div>
+
+  <a
+  href="https://www.google.com/maps/place/MUNICIPALIDAD+DEL+DEPARTAMENTO+DE+SAN+MARTIN+DE+ULAPES/@-31.5746093,-66.2373214,20.25z/data=!4m15!1m8!3m7!1s0x942b0b54eae2338d:0x76560069f1e31f8d!2sUlapes,+La+Rioja!3b1!8m2!3d-31.5732144!4d-66.237089!16s%2Fm%2F0bwl7fn!3m5!1s0x942b0b54f14d2e0b:0xb194f4acd04d40aa!8m2!3d-31.5745245!4d-66.2372012!16s%2Fg%2F1tfwfl8j?entry=ttu"
+  target="_blank"
+  class="text-sm font-medium text-blue-900 underline"
+>
+  Abrir en Google Maps
+  </a>
+    </div>
+
+<div class="mt-5 rounded-xl overflow-hidden border border-gray-100">
+  <iframe
+    title="Ubicación - Municipalidad de Ulapes"
+    class="w-full h-72"
+    loading="lazy"
+    allowfullscreen
+    referrerpolicy="no-referrer-when-downgrade"
+    src="https://www.google.com/maps?q=-31.5745245,-66.2372012&hl=es&z=18&output=embed"
+  ></iframe>
+</div>
+  </div>
+</section>
