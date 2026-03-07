@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, map } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export type NewsItem = {
   id: number;
@@ -14,7 +15,8 @@ export type NewsItem = {
 
 @Injectable({ providedIn: 'root' })
 export class NewsService {
-  private baseUrl = 'http://localhost:1337/api/news1';
+  private api = environment.apiUrl; // ej: https://web-municipal-backend-production.up.railway.app
+  private baseUrl = `${this.api}/api/news1`;
 
   constructor(private http: HttpClient) {}
 
@@ -25,19 +27,17 @@ export class NewsService {
   }
 
   search(query: string): Observable<NewsItem[]> {
-  const q = query.trim();
+    const q = query.trim();
+    if (!q) return this.getAll();
 
-  // Si está vacío, devolvemos todo
-  if (!q) return this.getAll();
+    const url =
+      `${this.baseUrl}?sort=publishedAt:desc&populate=cover` +
+      `&filters[title][$containsi]=${encodeURIComponent(q)}`;
 
-  const url =
-    `${this.baseUrl}?sort=publishedAt:desc&populate=cover` +
-    `&filters[title][$containsi]=${encodeURIComponent(q)}`;
-
-  return this.http
-    .get<any>(url)
-    .pipe(map((res) => (res.data ?? []).map((item: any) => this.mapItem(item))));
-}
+    return this.http
+      .get<any>(url)
+      .pipe(map((res) => (res.data ?? []).map((item: any) => this.mapItem(item))));
+  }
 
   getLatest(limit: number): Observable<NewsItem[]> {
     return this.http
@@ -48,19 +48,15 @@ export class NewsService {
   }
 
   getRelated(currentSlug: string | null, limit = 3): Observable<NewsItem[]> {
-  // Trae las últimas y filtra la actual (simple y efectivo)
-  return this.getLatest(limit + 2).pipe(
-    map((items) => items.filter((n) => n.slug !== currentSlug).slice(0, limit))
-  );
-}
-  
+    return this.getLatest(limit + 2).pipe(
+      map((items) => items.filter((n) => n.slug !== currentSlug).slice(0, limit))
+    );
+  }
 
   getBySlug(slug: string | null): Observable<NewsItem | null> {
     if (!slug) return of(null);
 
-    const url = `${this.baseUrl}?filters[slug][$eq]=${encodeURIComponent(
-      slug
-    )}&populate=cover`;
+    const url = `${this.baseUrl}?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=cover`;
 
     return this.http.get<any>(url).pipe(
       map((res) => {
@@ -71,12 +67,11 @@ export class NewsService {
   }
 
   private mapItem(base: any): NewsItem {
-    // Tu API devuelve cover como array directo: cover[0].url
     const coverFirst = Array.isArray(base.cover) ? base.cover[0] : base.cover;
 
-    // Preferimos small para cards (más liviano); fallback a original
     const relativeUrl =
       coverFirst?.formats?.small?.url ??
+      coverFirst?.formats?.thumbnail?.url ??
       coverFirst?.url ??
       null;
 
@@ -87,7 +82,8 @@ export class NewsService {
       excerpt: base.excerpt,
       content: base.content,
       publishedAt: base.publishedAt,
-      coverUrl: relativeUrl ? `http://localhost:1337${relativeUrl}` : null,
+      // ✅ /uploads/... se pega al ORIGIN del backend, no a /api/news1
+      coverUrl: relativeUrl ? `${this.api}${relativeUrl}` : null,
     };
   }
 }

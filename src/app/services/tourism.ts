@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, of } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export type TourismCategory =
   | 'naturaleza'
@@ -22,7 +23,8 @@ export type TourismPlace = {
 
 @Injectable({ providedIn: 'root' })
 export class TourismService {
-  private baseUrl = 'http://localhost:1337/api/places';
+  private api = environment.apiUrl; // ej: https://web-municipal-backend-production.up.railway.app
+  private baseUrl = `${this.api}/api/places`;
 
   constructor(private http: HttpClient) {}
 
@@ -32,7 +34,7 @@ export class TourismService {
       .pipe(map((res) => (res.data ?? []).map((item: any) => this.mapItem(item))));
   }
 
-  // ✅ NUEVO: traer 1 lugar por slug
+  // ✅ traer 1 lugar por slug
   getBySlug(slug: string | null): Observable<TourismPlace | null> {
     if (!slug) return of(null);
 
@@ -75,7 +77,8 @@ export class TourismService {
       excerpt: base.excerpt ?? '',
       description: base.description ?? '',
       mapsUrl: base.mapsUrl ?? null,
-      coverUrl: relativeUrl ? `http://localhost:1337${relativeUrl}` : null,
+      // ✅ /uploads/... se pega al ORIGIN del backend
+      coverUrl: relativeUrl ? `${this.api}${relativeUrl}` : null,
     };
   }
 }
