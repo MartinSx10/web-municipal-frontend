@@ -37,6 +37,7 @@
             <a
               [href]="n.linkUrl"
               target="_blank"
+              rel="noopener"
               class="text-sm font-medium underline"
               [ngClass]="n?.variant === 'warning' ? 'text-yellow-800' : 'text-blue-900'"
             >
@@ -45,7 +46,7 @@
           </ng-template>
         </ng-container>
 
-        <!-- Cerrar (persistente) -->
+        <!-- Cerrar -->
         <button
           type="button"
           (click)="noticeService.close(n)"
@@ -60,112 +61,38 @@
   </section>
 </ng-container>
 
+<!-- HERO (banner full + texto sin caja) -->
+<section class="relative text-white h-[360px] md:h-[520px] overflow-hidden">
+  <!-- Imagen -->
+  <img
+    src="assets/banner.webp"
+    alt="Banner institucional"
+    class="absolute inset-0 w-full h-full object-cover object-[70%_20%]"
+    loading="lazy"
+  />
 
-<!-- HERO responsive -->
-<section class="bg-gradient-to-b from-blue-500 to-blue-800 text-white">
-  <div class="max-w-6xl mx-auto px-6 py-10 sm:py-12 md:py-16">
-    <div class="grid gap-10 md:grid-cols-2 md:items-center">
+  <!-- Oscurecido general MUY leve -->
+  <div class="absolute inset-0 bg-black/15"></div>
 
-      <!-- Texto -->
-      <div class="order-2 md:order-1">
-        <p class="text-xs sm:text-sm uppercase tracking-widest text-blue-200">
-          Portal oficial
-        </p>
+  <!-- Degradado para legibilidad (abajo-izquierda) -->
+  <div class="absolute inset-0 bg-gradient-to-tr from-black/70 via-black/10 to-transparent"></div>
 
-        <h1 class="mt-2 font-bold leading-tight text-3xl sm:text-4xl lg:text-5xl">
-          Municipalidad Dpto San Martín
-        </h1>
+  <!-- Texto abajo a la izquierda -->
+  <div class="absolute left-5 bottom-5 md:left-8 md:bottom-8">
+    <p class="text-xs md:text-sm uppercase tracking-widest text-white/85 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+      Portal oficial
+    </p>
 
-        <p class="text-blue-100 mt-4 text-base sm:text-lg max-w-xl">
-          Información, trámites y novedades del municipio. Accedé a servicios y enterate
-          de lo más reciente.
-        </p>
+    <h1 class="mt-2 text-3xl md:text-5xl font-bold leading-tight drop-shadow-[0_6px_18px_rgba(0,0,0,0.85)]">
+      Municipalidad Dpto San Martín
+    </h1>
 
-        <!-- CTAs -->
-        <div class="mt-6 flex flex-col sm:flex-row gap-3">
-          <a
-            routerLink="/noticias"
-            class="inline-flex justify-center bg-white text-blue-900 px-5 py-3 rounded-lg font-medium shadow hover:opacity-90 transition"
-          >
-            Ver novedades
-          </a>
-
-          <a
-            routerLink="/contacto"
-            class="inline-flex justify-center border border-blue-200 text-white px-5 py-3 rounded-lg font-medium hover:bg-blue-700/40 transition"
-          >
-            Contacto
-          </a>
-        </div>
-
-        <!-- Accesos rápidos (responsive) -->
-        <div class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <a routerLink="/contacto" class="bg-blue-700/40 hover:bg-blue-700/60 transition rounded-lg px-3 py-3">
-            <p class="text-sm font-semibold">Trámites</p>
-            <p class="text-xs text-blue-100 mt-1">Gestiones</p>
-          </a>
-
-          <a routerLink="/contacto" class="bg-blue-700/40 hover:bg-blue-700/60 transition rounded-lg px-3 py-3">
-            <p class="text-sm font-semibold">Turnos</p>
-            <p class="text-xs text-blue-100 mt-1">Atención</p>
-          </a>
-
-          <a routerLink="/contacto" class="bg-blue-700/40 hover:bg-blue-700/60 transition rounded-lg px-3 py-3">
-            <p class="text-sm font-semibold">Teléfonos</p>
-            <p class="text-xs text-blue-100 mt-1">Útiles</p>
-          </a>
-
-          <a routerLink="/contacto" class="bg-blue-700/40 hover:bg-blue-700/60 transition rounded-lg px-3 py-3">
-            <p class="text-sm font-semibold">Reclamos</p>
-            <p class="text-xs text-blue-100 mt-1">Consultas</p>
-          </a>
-        </div>
-      </div>
-
-      <!-- Imagen destacada -->
-      <div class="order-1 md:order-2">
-        <div class="bg-white/10 border border-white/10 rounded-2xl p-4 shadow">
-          <ng-container *ngIf="(latest$ | async) as latest">
-            <div class="rounded-xl overflow-hidden">
-              <img
-                [src]="latest?.[0]?.coverUrl || '/assets/hero.jpg'"
-                class="w-full aspect-[16/10] md:aspect-[16/11] object-cover"
-                alt="Imagen destacada"
-                loading="lazy"
-              />
-            </div>
-
-            <div class="mt-4">
-              <p class="text-xs text-blue-200">
-                {{ latest?.[0]?.publishedAt | date:'dd/MM/yyyy' }}
-              </p>
-
-              <p class="text-lg font-semibold mt-1">
-                {{ latest?.[0]?.title || 'Novedades del municipio' }}
-              </p>
-
-              <p
-                class="text-blue-100 text-sm mt-2 overflow-hidden text-ellipsis"
-                style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;"
-              >
-                {{ latest?.[0]?.excerpt || 'Enterate de lo último publicado.' }}
-              </p>
-
-              <a
-                *ngIf="latest?.[0]?.slug"
-                class="inline-flex mt-3 text-sm font-medium underline underline-offset-4 hover:opacity-90"
-                [routerLink]="['/noticias', latest[0].slug]"
-              >
-                Ver noticia destacada
-              </a>
-            </div>
-          </ng-container>
-        </div>
-      </div>
-
-    </div>
+    <p class="mt-2 text-white/90 text-sm md:text-base drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
+      Ulapes — La Rioja
+    </p>
   </div>
 </section>
+
 
 <!-- ÚLTIMAS NOVEDADES (responsive) -->
 <section class="max-w-6xl mx-auto px-6 py-10">
