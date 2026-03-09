@@ -1,14 +1,28 @@
-<section class="bg-gradient-to-b from-blue-500 to-blue-800 text-white">
-  <div class="max-w-6xl mx-auto px-6 py-14 md:py-16">
+<!-- HERO TURISMO con imagen de fondo -->
+<section class="relative text-white overflow-hidden">
+  <!-- Imagen de fondo -->
+  <img
+    src="assets/ulapesturismo.webp"
+    alt="Turismo en Ulapes"
+    class="absolute inset-0 w-full h-full object-cover object-center"
+    loading="lazy"
+  />
+
+  <!-- Overlay para legibilidad -->
+  <div class="absolute inset-0 bg-black/55"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-black/35 via-black/40 to-black/70"></div>
+
+  <!-- Contenido -->
+  <div class="relative max-w-6xl mx-auto px-6 py-14 md:py-16">
     <div class="grid gap-10">
       <div>
-        <p class="text-sm uppercase tracking-widest text-blue-200">Turismo</p>
+        <p class="text-sm uppercase tracking-widest text-white/80">Turismo</p>
 
         <h1 class="text-3xl md:text-5xl font-bold mt-2 leading-tight">
           Descubrí Ulapes
         </h1>
 
-        <p class="text-blue-100 mt-4 text-base md:text-lg max-w-3xl">
+        <p class="text-white/85 mt-4 text-base md:text-lg max-w-3xl">
           Lugares para visitar, actividades, cultura y recomendaciones para disfrutar del departamento.
         </p>
 
@@ -18,7 +32,7 @@
             type="text"
             [formControl]="search"
             placeholder="Buscar lugares, actividades..."
-            class="flex-1 bg-white/10 border border-white/15 rounded-xl px-5 py-4 outline-none placeholder:text-blue-100/80 focus:ring-2 focus:ring-white/30"
+            class="flex-1 bg-white/15 border border-white/20 rounded-xl px-5 py-4 outline-none placeholder:text-white/70 focus:ring-2 focus:ring-white/30"
           />
 
           <button
