@@ -18,12 +18,12 @@
           "options": {
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
-            "assets": [ 
+            "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
               },
-            {
+              {
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "/assets"
@@ -35,6 +35,12 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",

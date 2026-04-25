@@ -23,7 +23,7 @@ export type TourismPlace = {
 
 @Injectable({ providedIn: 'root' })
 export class TourismService {
-  private api = environment.apiUrl; // ej: https://web-municipal-backend-production.up.railway.app
+  private api = environment.apiUrl; 
   private baseUrl = `${this.api}/api/places`;
 
   constructor(private http: HttpClient) {}

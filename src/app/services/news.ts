@@ -15,7 +15,7 @@ export type NewsItem = {
 
 @Injectable({ providedIn: 'root' })
 export class NewsService {
-  private api = environment.apiUrl; // ej: https://web-municipal-backend-production.up.railway.app
+  private api = environment.apiUrl; 
   private baseUrl = `${this.api}/api/news1`;
 
   constructor(private http: HttpClient) {}
