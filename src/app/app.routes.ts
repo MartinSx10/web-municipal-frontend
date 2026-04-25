@@ -9,6 +9,7 @@ import { SecretariaComponent } from './pages/secretaria/secretaria';
 
 
 
+
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
 
@@ -26,5 +27,8 @@ export const routes: Routes = [
    
 
   { path: '**', redirectTo: '' },
+
+  { path: 'tramites', loadComponent: () => import('./pages/tramites/tramites').then(m => m.Tramites) },
+{ path: 'agenda', loadComponent: () => import('./pages/agenda/agenda').then(m => m.Agenda) },
   
 ];

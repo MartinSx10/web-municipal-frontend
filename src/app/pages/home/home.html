@@ -93,6 +93,93 @@
   </div>
 </section>
 
+<!-- SERVICIOS / TRÁMITES -->
+<section class="max-w-6xl mx-auto px-6 py-10">
+  <div class="flex items-end justify-between gap-4 flex-wrap">
+    <div>
+      <h2 class="text-xl sm:text-2xl font-bold">Servicios y trámites</h2>
+      <p class="text-gray-600 mt-1 text-sm sm:text-base">Accesos rápidos a gestiones frecuentes.</p>
+    </div>
+    <a routerLink="/tramites" class="text-sm font-medium text-blue-900 underline underline-offset-4 hover:opacity-90">
+      Ver todos
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
+    <a
+      *ngFor="let s of services"
+      [routerLink]="s.route || null"
+      [href]="s.url || null"
+      [attr.target]="s.url ? '_blank' : null"
+      [attr.rel]="s.url ? 'noopener' : null"
+      class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition block"
+    >
+      <div class="text-2xl">{{ s.icon || '🏛️' }}</div>
+      <div class="mt-3 font-semibold text-gray-900">{{ s.title }}</div>
+      <div class="mt-1 text-sm text-gray-600">{{ s.description }}</div>
+      <div class="mt-4 text-sm font-medium text-blue-900 underline underline-offset-4">Abrir</div>
+    </a>
+  </div>
+</section>
+
+<!-- AGENDA Y EVENTOS -->
+<section class="max-w-6xl mx-auto px-6 pb-10">
+  <div class="flex items-end justify-between gap-4 flex-wrap">
+    <div>
+      <h2 class="text-xl sm:text-2xl font-bold">Agenda y eventos</h2>
+      <p class="text-gray-600 mt-1 text-sm sm:text-base">Próximas actividades del municipio.</p>
+    </div>
+    <a routerLink="/agenda" class="text-sm font-medium text-blue-900 underline underline-offset-4 hover:opacity-90">
+      Ver agenda
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-6">
+    <article
+      *ngFor="let e of events"
+      class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5"
+    >
+      <p class="text-xs text-gray-500">
+        {{ e.date | date:'dd/MM/yyyy' }} <span *ngIf="e.time">— {{ e.time }}</span>
+      </p>
+      <h3 class="text-lg font-semibold mt-2">{{ e.title }}</h3>
+      <p class="text-sm text-gray-600 mt-1" *ngIf="e.place">{{ e.place }}</p>
+
+      <a
+        class="inline-flex mt-4 text-sm font-medium text-blue-900 underline underline-offset-4 hover:opacity-90"
+        [routerLink]="e.route || '/agenda'"
+      >
+        Ver detalle
+      </a>
+    </article>
+  </div>
+</section>
+
+<!-- ACCESOS RÁPIDOS / EMERGENCIAS -->
+<section class="max-w-6xl mx-auto px-6 pb-12">
+  <div class="rounded-2xl bg-slate-900 text-white p-6 md:p-8">
+    <div class="flex items-start justify-between gap-6 flex-wrap">
+      <div>
+        <h2 class="text-lg md:text-xl font-bold">Accesos rápidos y emergencias</h2>
+        <p class="text-white/80 mt-1 text-sm">Contactos y accesos importantes para vecinos.</p>
+      </div>
+      <a routerLink="/contacto" class="text-sm font-medium underline underline-offset-4 text-white/90 hover:text-white">
+        Ir a contacto
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+      <div
+        *ngFor="let em of emergencies"
+        class="rounded-xl bg-white/10 border border-white/10 p-4"
+      >
+        <div class="font-semibold">{{ em.title }}</div>
+        <div class="text-sm text-white/80 mt-1" *ngIf="em.description">{{ em.description }}</div>
+        <div class="mt-3 text-lg font-bold" *ngIf="em.phone">{{ em.phone }}</div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ÚLTIMAS NOVEDADES (responsive) -->
 <section class="max-w-6xl mx-auto px-6 py-10">

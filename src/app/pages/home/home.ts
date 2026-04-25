@@ -4,6 +4,9 @@ import { RouterModule } from '@angular/router';
 import { Observable, catchError, of, shareReplay } from 'rxjs';
 import { NewsService, NewsItem } from '../../services/news';
 import { NoticeService } from '../../services/notice';
+import { SERVICES } from '../../data/services.data';
+import { EVENTS } from '../../data/events.data';
+import { EMERGENCIES } from '../../data/emergency.data';
 
 @Component({
   selector: 'app-home',
@@ -15,6 +18,9 @@ import { NoticeService } from '../../services/notice';
 export class HomeComponent {
   private newsService = inject(NewsService);
   noticeService = inject(NoticeService);
+  services = SERVICES;
+  events = EVENTS;
+  emergencies = EMERGENCIES;
 
   latest$: Observable<NewsItem[]> = this.newsService.getLatest(3).pipe(
     catchError((err) => {
