@@ -15,8 +15,8 @@ export type Notice = {
   documentId?: string;
 };
 
-const API = 'https://web-municipal-backend-production.up.railway.app';
-const NOTICE_ENDPOINT = '/api/aviso'; // ✅ SINGLE TYPE real
+const API = environment.apiUrl;
+const NOTICE_ENDPOINT = '/api/aviso';
 const CLOSED_PREFIX = 'municipal_notice_closed_';
 
 @Injectable({ providedIn: 'root' })

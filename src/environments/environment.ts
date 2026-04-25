@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://web-municipal-backend-production.up.railway.app',
+  apiUrl: 'http://localhost:1337', // si en dev usás Strapi local
 };
