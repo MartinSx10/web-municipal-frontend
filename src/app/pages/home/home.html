@@ -7,10 +7,7 @@
   >
     <div class="max-w-6xl mx-auto px-6 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
       <div class="flex items-start gap-3">
-        <span
-          class="font-semibold"
-          [ngClass]="n?.variant === 'warning' ? 'text-yellow-700' : 'text-blue-900'"
-        >
+        <span class="font-semibold" [ngClass]="n?.variant === 'warning' ? 'text-yellow-700' : 'text-blue-900'">
           📢 {{ n?.title || 'Comunicado' }}
         </span>
 
@@ -20,9 +17,7 @@
       </div>
 
       <div class="flex items-center gap-4">
-        <!-- LINK (interno o externo) -->
         <ng-container *ngIf="n?.linkUrl">
-          <!-- interno -->
           <a
             *ngIf="n.linkUrl?.startsWith('/'); else externalLink"
             [routerLink]="n.linkUrl"
@@ -32,7 +27,6 @@
             {{ n?.linkText || 'Ver más' }}
           </a>
 
-          <!-- externo -->
           <ng-template #externalLink>
             <a
               [href]="n.linkUrl"
@@ -46,7 +40,6 @@
           </ng-template>
         </ng-container>
 
-        <!-- Cerrar -->
         <button
           type="button"
           (click)="noticeService.close(n)"
@@ -61,192 +54,61 @@
   </section>
 </ng-container>
 
-<!-- HERO (banner full + texto sin caja) -->
-<section class="relative text-white h-[360px] md:h-[520px] overflow-hidden">
-  <!-- Imagen -->
+<!-- HERO (banner institucional) -->
+<section class="relative text-white min-h-[360px] md:min-h-[520px] overflow-hidden">
   <img
     src="assets/banner.webp"
     alt="Banner institucional"
-    class="absolute inset-0 w-full h-full object-cover object-[70%_20%]"
+    class="absolute inset-0 w-full h-full object-cover object-top"
     loading="lazy"
   />
+  <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/70"></div>
 
-  <!-- Oscurecido general MUY leve -->
-  <div class="absolute inset-0 bg-black/15"></div>
-
-  <!-- Degradado para legibilidad (abajo-izquierda) -->
-  <div class="absolute inset-0 bg-gradient-to-tr from-black/70 via-black/10 to-transparent"></div>
-
-  <!-- Texto abajo a la izquierda -->
-  <div class="absolute left-5 bottom-5 md:left-8 md:bottom-8">
-    <p class="text-xs md:text-sm uppercase tracking-widest text-white/85 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-      Portal oficial
-    </p>
-
-    <h1 class="mt-2 text-3xl md:text-5xl font-bold leading-tight drop-shadow-[0_6px_18px_rgba(0,0,0,0.85)]">
-      Municipalidad Dpto San Martín
-    </h1>
-
-    <p class="mt-2 text-white/90 text-sm md:text-base drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
-      Ulapes — La Rioja
-    </p>
-  </div>
-</section>
-
-<!-- SERVICIOS / TRÁMITES -->
-<section class="max-w-6xl mx-auto px-6 py-10">
-  <div class="flex items-end justify-between gap-4 flex-wrap">
-    <div>
-      <h2 class="text-xl sm:text-2xl font-bold">Servicios y trámites</h2>
-      <p class="text-gray-600 mt-1 text-sm sm:text-base">Accesos rápidos a gestiones frecuentes.</p>
+  <div class="relative max-w-6xl mx-auto px-6 h-full flex items-end justify-start">
+    <div class="pb-8 md:pb-12">
+      <p class="text-xs md:text-sm uppercase tracking-widest text-white/80">Portal oficial</p>
+      <h1 class="text-3xl md:text-5xl font-bold mt-2 leading-tight">Municipalidad Dpto San Martín</h1>
+      <p class="mt-2 text-white/85">Ulapes — La Rioja</p>
     </div>
-    <a routerLink="/tramites" class="text-sm font-medium text-blue-900 underline underline-offset-4 hover:opacity-90">
-      Ver todos
-    </a>
-  </div>
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
-    <a
-      *ngFor="let s of services"
-      [routerLink]="s.route || null"
-      [href]="s.url || null"
-      [attr.target]="s.url ? '_blank' : null"
-      [attr.rel]="s.url ? 'noopener' : null"
-      class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition block"
-    >
-      <div class="text-2xl">{{ s.icon || '🏛️' }}</div>
-      <div class="mt-3 font-semibold text-gray-900">{{ s.title }}</div>
-      <div class="mt-1 text-sm text-gray-600">{{ s.description }}</div>
-      <div class="mt-4 text-sm font-medium text-blue-900 underline underline-offset-4">Abrir</div>
-    </a>
   </div>
 </section>
 
-<!-- AGENDA Y EVENTOS -->
-<section class="max-w-6xl mx-auto px-6 pb-10">
-  <div class="flex items-end justify-between gap-4 flex-wrap">
-    <div>
-      <h2 class="text-xl sm:text-2xl font-bold">Agenda y eventos</h2>
-      <p class="text-gray-600 mt-1 text-sm sm:text-base">Próximas actividades del municipio.</p>
-    </div>
-    <a routerLink="/agenda" class="text-sm font-medium text-blue-900 underline underline-offset-4 hover:opacity-90">
-      Ver agenda
-    </a>
-  </div>
-
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-6">
-    <article
-      *ngFor="let e of events"
-      class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5"
-    >
-      <p class="text-xs text-gray-500">
-        {{ e.date | date:'dd/MM/yyyy' }} <span *ngIf="e.time">— {{ e.time }}</span>
-      </p>
-      <h3 class="text-lg font-semibold mt-2">{{ e.title }}</h3>
-      <p class="text-sm text-gray-600 mt-1" *ngIf="e.place">{{ e.place }}</p>
-
-      <a
-        class="inline-flex mt-4 text-sm font-medium text-blue-900 underline underline-offset-4 hover:opacity-90"
-        [routerLink]="e.route || '/agenda'"
-      >
-        Ver detalle
-      </a>
-    </article>
-  </div>
-</section>
-
-
-
-<!-- ÚLTIMAS NOVEDADES (responsive) -->
+<!-- 1) ÚLTIMAS NOVEDADES -->
 <section class="max-w-6xl mx-auto px-6 py-10">
   <div class="flex items-end justify-between gap-4 flex-wrap">
     <div>
       <h2 class="text-xl sm:text-2xl font-bold">Últimas novedades</h2>
-      <p class="text-gray-600 mt-1 text-sm sm:text-base">
-        Lo más reciente del municipio.
-      </p>
+      <p class="text-gray-600 mt-1 text-sm sm:text-base">Lo más reciente del municipio.</p>
     </div>
 
-    <a
-      routerLink="/noticias"
-      class="text-sm font-medium text-blue-900 underline underline-offset-4 hover:opacity-90"
-    >
+    <a routerLink="/noticias" class="text-sm font-medium text-blue-900 underline underline-offset-4 hover:opacity-90">
       Ver todas
     </a>
   </div>
 
-  <!-- ACCESOS RÁPIDOS / EMERGENCIAS -->
-<section class="max-w-6xl mx-auto px-6 pb-12">
-  <div class="rounded-2xl bg-slate-900 text-white p-6 md:p-8">
-    <div class="flex items-start justify-between gap-6 flex-wrap">
-      <div>
-        <h2 class="text-lg md:text-xl font-bold">Accesos rápidos y emergencias</h2>
-        <p class="text-white/80 mt-1 text-sm">Contactos y accesos importantes para vecinos.</p>
-      </div>
-      <a routerLink="/contacto" class="text-sm font-medium underline underline-offset-4 text-white/90 hover:text-white">
-        Ir a contacto
-      </a>
-    </div>
+  <ng-container *ngIf="(latest$ | async) as latest; else newsLoadingTpl">
+    <div *ngIf="latest.length === 0" class="text-gray-600 mt-6">No hay novedades todavía.</div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-      <div
-        *ngFor="let em of emergencies"
-        class="rounded-xl bg-white/10 border border-white/10 p-4"
-      >
-        <div class="font-semibold">{{ em.title }}</div>
-        <div class="text-sm text-white/80 mt-1" *ngIf="em.description">{{ em.description }}</div>
-        <div class="mt-3 text-lg font-bold" *ngIf="em.phone">{{ em.phone }}</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-  <ng-container *ngIf="(latest$ | async) as latest; else loadingTpl">
-    <div *ngIf="latest.length === 0" class="text-gray-600 mt-6">
-      No hay novedades todavía.
-    </div>
-
-    <div
-      *ngIf="latest.length > 0"
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6"
-    >
-      <article
-        *ngFor="let n of latest"
-        class="bg-white rounded-2xl shadow p-5 transition hover:shadow-lg"
-      >
+    <div *ngIf="latest.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+      <article *ngFor="let n of latest" class="bg-white rounded-2xl shadow p-5 transition hover:shadow-lg">
         <div class="rounded-xl overflow-hidden">
-          <img
-            *ngIf="n.coverUrl; else noImg"
-            [src]="n.coverUrl"
-            class="w-full aspect-[16/10] object-cover"
-            alt="Imagen de la noticia"
-            loading="lazy"
-          />
+          <img *ngIf="n.coverUrl; else noImg" [src]="n.coverUrl" class="w-full aspect-[16/10] object-cover" alt="Imagen" loading="lazy" />
           <ng-template #noImg>
             <div class="w-full aspect-[16/10] bg-gray-200"></div>
           </ng-template>
         </div>
 
         <div class="mt-4">
-          <p class="text-xs text-gray-500">
-            {{ n.publishedAt | date:'dd/MM/yyyy' }}
-          </p>
+          <p class="text-xs text-gray-500">{{ n.publishedAt | date:'dd/MM/yyyy' }}</p>
+          <h3 class="text-lg font-semibold mt-1 leading-snug">{{ n.title }}</h3>
 
-          <h3 class="text-lg font-semibold mt-1 leading-snug">
-            {{ n.title }}
-          </h3>
-
-          <p
-            class="text-gray-600 text-sm mt-2 overflow-hidden text-ellipsis"
-            style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;"
-          >
+          <p class="text-gray-600 text-sm mt-2 overflow-hidden text-ellipsis"
+             style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">
             {{ n.excerpt }}
           </p>
 
-          <a
-            class="inline-flex mt-4 text-sm font-medium text-blue-900 underline underline-offset-4 hover:opacity-90"
-            [routerLink]="['/noticias', n.slug]"
-          >
+          <a class="inline-flex mt-4 text-sm font-medium text-blue-900 underline underline-offset-4 hover:opacity-90"
+             [routerLink]="['/noticias', n.slug]">
             Ver detalle
           </a>
         </div>
@@ -254,12 +116,9 @@
     </div>
   </ng-container>
 
-  <ng-template #loadingTpl>
+  <ng-template #newsLoadingTpl>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-      <div
-        class="bg-white rounded-2xl shadow p-5 animate-pulse"
-        *ngFor="let _ of [1,2,3]"
-      >
+      <div class="bg-white rounded-2xl shadow p-5 animate-pulse" *ngFor="let _ of [1,2,3]">
         <div class="w-full aspect-[16/10] bg-gray-200 rounded-xl"></div>
         <div class="h-3 w-24 bg-gray-200 rounded mt-4"></div>
         <div class="h-5 w-3/4 bg-gray-200 rounded mt-3"></div>
@@ -270,4 +129,115 @@
   </ng-template>
 </section>
 
+<!-- 2) SERVICIOS Y TRÁMITES (STRAPI) -->
+<section class="max-w-6xl mx-auto px-6 pb-10">
+  <div class="flex items-end justify-between gap-4 flex-wrap">
+    <div>
+      <h2 class="text-xl sm:text-2xl font-bold">Servicios y trámites</h2>
+      <p class="text-gray-600 mt-1 text-sm sm:text-base">Accesos rápidos a gestiones frecuentes.</p>
+    </div>
+
+    <a routerLink="/contacto" class="text-sm font-medium text-blue-900 underline underline-offset-4 hover:opacity-90">
+      Ver todos
+    </a>
+  </div>
+
+  <ng-container *ngIf="(services$ | async) as services">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+      <a
+        *ngFor="let s of services"
+        [href]="serviceHref(s)"
+        [attr.target]="serviceTarget(s)"
+        [attr.rel]="serviceTarget(s) ? 'noopener' : null"
+        class="bg-white rounded-2xl shadow p-6 hover:shadow-lg transition"
+      >
+        <div class="text-2xl">{{ s.icon || '📌' }}</div>
+        <h3 class="font-semibold mt-3">{{ s.title }}</h3>
+        <p class="text-sm text-gray-600 mt-1">{{ s.subtitle }}</p>
+        <span class="inline-block mt-4 text-sm font-medium text-blue-900 underline">Abrir</span>
+      </a>
+    </div>
+
+    <div *ngIf="services.length === 0" class="text-gray-600 mt-6">
+      No hay servicios cargados todavía.
+    </div>
+  </ng-container>
+</section>
+
+<!-- 3) AGENDA Y EVENTOS (STRAPI) -->
+<section class="max-w-6xl mx-auto px-6 pb-10">
+  <div class="flex items-end justify-between gap-4 flex-wrap">
+    <div>
+      <h2 class="text-xl sm:text-2xl font-bold">Agenda y eventos</h2>
+      <p class="text-gray-600 mt-1 text-sm sm:text-base">Próximas actividades del municipio.</p>
+    </div>
+
+    <a routerLink="/noticias" class="text-sm font-medium text-blue-900 underline underline-offset-4 hover:opacity-90">
+      Ver agenda
+    </a>
+  </div>
+
+  <ng-container *ngIf="(events$ | async) as evs">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+      <div *ngFor="let e of evs" class="bg-white rounded-2xl shadow p-6">
+        <p class="text-sm text-gray-500">
+          {{ e.startAt | date:'dd/MM/yyyy HH:mm' }}
+          <span *ngIf="e.location">— {{ e.location }}</span>
+        </p>
+
+        <h3 class="font-semibold text-lg mt-2">{{ e.title }}</h3>
+        <p class="text-sm text-gray-600 mt-1">{{ e.excerpt }}</p>
+
+        <a
+          class="inline-block mt-4 text-sm font-medium text-blue-900 underline"
+          [href]="e.url || '/noticias'"
+          [attr.target]="e.url?.startsWith('http') ? '_blank' : null"
+          [attr.rel]="e.url?.startsWith('http') ? 'noopener' : null"
+        >
+          Ver detalle
+        </a>
+      </div>
+    </div>
+
+    <div *ngIf="evs.length === 0" class="text-gray-600 mt-6">
+      No hay eventos cargados todavía.
+    </div>
+  </ng-container>
+</section>
+
+<!-- 4) ACCESOS RÁPIDOS / EMERGENCIAS (STRAPI) -->
+<section class="max-w-6xl mx-auto px-6 pb-14">
+  <div class="rounded-3xl bg-slate-900 text-white p-8 md:p-10 shadow-xl">
+    <div class="flex items-start justify-between gap-6 flex-wrap">
+      <div>
+        <h2 class="text-xl md:text-2xl font-bold">Accesos rápidos y emergencias</h2>
+        <p class="text-white/75 mt-1">Contactos y accesos importantes para vecinos.</p>
+      </div>
+
+      <a routerLink="/contacto" class="text-sm font-medium underline underline-offset-4 hover:opacity-90">
+        Ir a contacto
+      </a>
+    </div>
+
+    <ng-container *ngIf="(emergencies$ | async) as ems">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
+        <a
+          *ngFor="let e of ems"
+          [href]="emergencyHref(e)"
+          [attr.target]="e.type === 'url' || e.type === 'whatsapp' ? '_blank' : null"
+          rel="noopener"
+          class="rounded-2xl bg-white/10 border border-white/10 p-6 hover:bg-white/15 transition"
+        >
+          <p class="text-lg font-semibold">{{ e.title }}</p>
+          <p class="text-white/75 text-sm mt-1">{{ e.description }}</p>
+          <p class="text-2xl font-bold mt-4">{{ e.phone }}</p>
+        </a>
+      </div>
+
+      <div *ngIf="ems.length === 0" class="text-white/70 mt-6">
+        No hay emergencias cargadas todavía.
+      </div>
+    </ng-container>
+  </div>
+</section>
 
