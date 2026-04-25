@@ -25,7 +25,7 @@ export class HomeComponent {
   private eventsService = inject(EventsService);
   private emergencyService = inject(EmergencyService);
 
-  // Noticias
+  // 1) Noticias
   latest$: Observable<NewsItem[]> = this.newsService.getLatest(3).pipe(
     catchError((err) => {
       console.error('Error cargando últimas noticias:', err);
@@ -34,8 +34,8 @@ export class HomeComponent {
     shareReplay(1)
   );
 
-  // Servicios y trámites (Strapi)
-  services$: Observable<ServiceItem[]> = this.servicesService.getAll(4).pipe(
+  // 2) Servicios y trámites (Strapi) -> 6 para que se vea completo
+  services$: Observable<ServiceItem[]> = this.servicesService.getAll(6).pipe(
     catchError((err) => {
       console.error('Error cargando services:', err);
       return of([] as ServiceItem[]);
@@ -43,8 +43,8 @@ export class HomeComponent {
     shareReplay(1)
   );
 
-  // Agenda y eventos (Strapi)
-  events$: Observable<EventItem[]> = this.eventsService.getUpcoming(3).pipe(
+  // 3) Agenda y eventos (Strapi) -> 4 para que se vea más “real”
+  events$: Observable<EventItem[]> = this.eventsService.getUpcoming(4).pipe(
     catchError((err) => {
       console.error('Error cargando events:', err);
       return of([] as EventItem[]);
@@ -52,7 +52,7 @@ export class HomeComponent {
     shareReplay(1)
   );
 
-  // Emergencias (Strapi)
+  // 4) Emergencias (Strapi)
   emergencies$: Observable<EmergencyItem[]> = this.emergencyService.getAll().pipe(
     catchError((err) => {
       console.error('Error cargando emergencies:', err);
@@ -61,9 +61,14 @@ export class HomeComponent {
     shareReplay(1)
   );
 
-  // Helpers para links en el HTML
+  // Helpers para links en el HTML (Servicios)
   serviceHref = (s: ServiceItem) => this.servicesService.buildHref(s);
   serviceTarget = (s: ServiceItem) => (this.servicesService.isExternal(s) ? '_blank' : null);
 
+  // Helpers para links en el HTML (Eventos)
+  eventHref = (e: EventItem) => (e.url ? e.url : '/noticias');
+  eventTarget = (e: EventItem) => (e.url ? '_blank' : null);
+
+  // Helpers para links en el HTML (Emergencias)
   emergencyHref = (e: EmergencyItem) => this.emergencyService.buildHref(e);
 }
