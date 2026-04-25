@@ -34,7 +34,7 @@ export class HomeComponent {
     shareReplay(1)
   );
 
-  // Servicios/Trámites
+  // Servicios y trámites (Strapi)
   services$: Observable<ServiceItem[]> = this.servicesService.getAll(4).pipe(
     catchError((err) => {
       console.error('Error cargando services:', err);
@@ -43,7 +43,7 @@ export class HomeComponent {
     shareReplay(1)
   );
 
-  // Eventos (agenda)
+  // Agenda y eventos (Strapi)
   events$: Observable<EventItem[]> = this.eventsService.getUpcoming(3).pipe(
     catchError((err) => {
       console.error('Error cargando events:', err);
@@ -52,7 +52,7 @@ export class HomeComponent {
     shareReplay(1)
   );
 
-  // Emergencias
+  // Emergencias (Strapi)
   emergencies$: Observable<EmergencyItem[]> = this.emergencyService.getAll().pipe(
     catchError((err) => {
       console.error('Error cargando emergencies:', err);
@@ -61,7 +61,7 @@ export class HomeComponent {
     shareReplay(1)
   );
 
-  // Helpers para links
+  // Helpers para links en el HTML
   serviceHref = (s: ServiceItem) => this.servicesService.buildHref(s);
   serviceTarget = (s: ServiceItem) => (this.servicesService.isExternal(s) ? '_blank' : null);
 
