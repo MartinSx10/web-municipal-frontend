@@ -71,4 +71,20 @@ export class HomeComponent {
 
   // Helpers para links en el HTML (Emergencias)
   emergencyHref = (e: EmergencyItem) => this.emergencyService.buildHref(e);
+
+  // UI helpers (Emergencias)
+emergencyIcon = (e: EmergencyItem) => {
+  if (e.type === 'whatsapp') return '💬';
+  if (e.type === 'url') return '🔗';
+  return '📞';
+};
+
+emergencyCta = (e: EmergencyItem) => {
+  if (e.type === 'whatsapp') return 'WhatsApp';
+  if (e.type === 'url') return 'Abrir';
+  return 'Llamar';
+};
+
+emergencyTarget = (e: EmergencyItem) => (e.type === 'url' || e.type === 'whatsapp' ? '_blank' : null);
 }
+

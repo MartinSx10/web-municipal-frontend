@@ -151,174 +151,306 @@
   </ng-template>
 </section>
 
-<!-- 2) SERVICIOS Y TRÁMITES (UX mejor: full width + compacto) -->
-<section class="bg-slate-50 border-t border-slate-100">
-  <div class="max-w-6xl mx-auto px-6 py-12">
-    <div class="flex items-end justify-between gap-4 flex-wrap">
-      <div>
-        <h2 class="text-2xl sm:text-3xl font-bold">Servicios y trámites</h2>
-        <p class="text-gray-600 mt-1">Accesos rápidos a gestiones frecuentes.</p>
-      </div>
-
-      <a routerLink="/contacto" class="text-sm font-medium text-blue-900 underline underline-offset-4 hover:opacity-90">
-        Ver todos
-      </a>
-    </div>
-
-    <ng-container *ngIf="(services$ | async) as services; else servicesLoadingTpl">
-      <div *ngIf="services.length === 0" class="text-gray-600 mt-6">
-        Aún no hay servicios cargados.
-      </div>
-
-      <div *ngIf="services.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-7">
-        <a
-          *ngFor="let s of services"
-          [href]="serviceHref(s)"
-          [attr.target]="serviceTarget(s)"
-          [attr.rel]="serviceTarget(s) ? 'noopener' : null"
-          class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 hover:shadow-md hover:-translate-y-[1px] transition"
-        >
-          <div class="flex items-start gap-4">
-            <div class="text-2xl leading-none mt-0.5">{{ s.icon || '📌' }}</div>
-
-            <div class="min-w-0">
-              <h3 class="font-semibold text-base sm:text-lg leading-snug truncate">
-                {{ s.title }}
-              </h3>
-
-              <p class="text-sm text-gray-600 mt-1" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
-                {{ s.subtitle }}
-              </p>
-
-              <span class="inline-flex mt-3 text-sm font-medium text-blue-900 underline underline-offset-4">
-                Abrir
-              </span>
-            </div>
-          </div>
-        </a>
-      </div>
-    </ng-container>
-
-    <ng-template #servicesLoadingTpl>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-7">
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 animate-pulse" *ngFor="let _ of [1,2,3,4,5,6]">
-          <div class="flex gap-4">
-            <div class="h-8 w-8 bg-gray-200 rounded"></div>
-            <div class="flex-1">
-              <div class="h-5 w-2/3 bg-gray-200 rounded"></div>
-              <div class="h-4 w-full bg-gray-200 rounded mt-3"></div>
-              <div class="h-4 w-1/2 bg-gray-200 rounded mt-2"></div>
-              <div class="h-4 w-20 bg-gray-200 rounded mt-4"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </ng-template>
-  </div>
-</section>
-
-<!-- 3) AGENDA Y EVENTOS (full width, se ve bien incluso con 1 evento) -->
-<section class="max-w-6xl mx-auto px-6 pb-14">
-  <div class="flex items-end justify-between gap-4 flex-wrap pt-10">
+<!-- 2) SERVICIOS Y TRÁMITES -->
+<section class="max-w-6xl mx-auto px-6 py-12">
+  <div class="flex items-end justify-between gap-4 flex-wrap">
     <div>
-      <h2 class="text-2xl sm:text-3xl font-bold">Agenda y eventos</h2>
-      <p class="text-gray-600 mt-1">Actividades y anuncios del municipio.</p>
+      <p class="text-sm font-semibold uppercase tracking-wide text-blue-800">
+        Accesos útiles
+      </p>
+      <h2 class="text-3xl font-bold text-slate-900 mt-1">
+        Servicios y trámites
+      </h2>
+      <p class="text-slate-600 mt-2 text-base">
+        Accesos rápidos a gestiones frecuentes del municipio.
+      </p>
     </div>
 
-    <a routerLink="/noticias" class="text-sm font-medium text-blue-900 underline underline-offset-4 hover:opacity-90">
-      Ver agenda
+    <a
+      routerLink="/contacto"
+      class="inline-flex items-center gap-2 text-sm font-semibold text-blue-900 hover:text-blue-700 underline underline-offset-4"
+    >
+      Ver todos
+      <span>→</span>
     </a>
   </div>
 
-  <ng-container *ngIf="(events$ | async) as events; else eventsLoadingTpl">
-    <div *ngIf="events.length === 0" class="text-gray-600 mt-6">
-      No hay eventos cargados.
+  <ng-container *ngIf="(services$ | async) as services">
+    <div
+      *ngIf="services.length === 0"
+      class="mt-8 rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-slate-600"
+    >
+      No hay servicios cargados todavía.
     </div>
 
-    <div *ngIf="events.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-7">
-      <a
-        *ngFor="let e of events"
-        [href]="eventHref(e)"
-        [attr.target]="eventTarget(e)"
-        [attr.rel]="eventTarget(e) ? 'noopener' : null"
-        class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition"
+    <div
+      *ngIf="services.length > 0"
+      class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-8"
+    >
+      <article
+        *ngFor="let s of services"
+        class="group rounded-3xl border border-slate-200 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
       >
-        <div class="flex items-start gap-4">
-          <div class="shrink-0 rounded-xl bg-slate-900 text-white px-4 py-3 text-center">
-            <div class="text-xs opacity-80">{{ e.startAt | date:'MMM' }}</div>
-            <div class="text-2xl font-bold leading-none">{{ e.startAt | date:'dd' }}</div>
-            <div class="text-xs opacity-80 mt-1">{{ e.startAt | date:'HH:mm' }}</div>
-          </div>
+        <div class="p-6 flex flex-col h-full">
+          <div class="flex items-start justify-between gap-4">
+            <div
+              class="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-2xl shrink-0"
+            >
+              {{ s.icon || '📄' }}
+            </div>
 
-          <div class="min-w-0">
-            <h3 class="font-semibold text-lg leading-snug">
-              {{ e.title }}
-            </h3>
-
-            <p class="text-sm text-gray-600 mt-1" *ngIf="e.location">
-              📍 {{ e.location }}
-            </p>
-
-            <p class="text-sm text-gray-600 mt-2" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
-              {{ e.excerpt }}
-            </p>
-
-            <span class="inline-flex mt-3 text-sm font-medium text-blue-900 underline underline-offset-4">
-              Ver detalle
+            <span
+              class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold border"
+              [ngClass]="
+                s.type === 'external'
+                  ? 'bg-amber-50 text-amber-700 border-amber-200'
+                  : 'bg-blue-50 text-blue-700 border-blue-200'
+              "
+            >
+              {{ s.type === 'external' ? 'Enlace externo' : 'Trámite' }}
             </span>
           </div>
-        </div>
-      </a>
-    </div>
-  </ng-container>
 
-  <ng-template #eventsLoadingTpl>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-7">
-      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 animate-pulse" *ngFor="let _ of [1,2]">
-        <div class="flex gap-4">
-          <div class="h-20 w-20 bg-gray-200 rounded-xl"></div>
-          <div class="flex-1">
-            <div class="h-5 w-2/3 bg-gray-200 rounded"></div>
-            <div class="h-4 w-1/2 bg-gray-200 rounded mt-3"></div>
-            <div class="h-4 w-full bg-gray-200 rounded mt-3"></div>
-            <div class="h-4 w-24 bg-gray-200 rounded mt-4"></div>
+          <div class="mt-5">
+            <h3 class="text-xl font-bold text-slate-900 leading-snug">
+              {{ s.title }}
+            </h3>
+
+            <p class="text-slate-600 text-sm mt-2 min-h-[44px]">
+              {{ s.subtitle || 'Información y acceso rápido.' }}
+            </p>
+          </div>
+
+          <div class="mt-5 space-y-2 text-sm text-slate-500">
+            <div class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-blue-600 inline-block"></span>
+              <span>
+                {{
+                  s.type === 'external'
+                    ? 'Se abrirá en un sitio externo'
+                    : 'Gestión municipal o contacto institucional'
+                }}
+              </span>
+            </div>
+          </div>
+
+          <div class="mt-auto pt-6">
+            <!-- INTERNOS -->
+            <a
+              *ngIf="s.type === 'internal'; else externalService"
+              [routerLink]="s.url?.startsWith('/') ? s.url : '/contacto'"
+              class="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-slate-900 text-white px-4 py-3 text-sm font-semibold hover:bg-blue-900 transition-colors"
+            >
+              Abrir trámite
+              <span>→</span>
+            </a>
+
+            <!-- EXTERNOS -->
+            <ng-template #externalService>
+              <a
+                [href]="serviceHref(s)"
+                [attr.target]="serviceTarget(s)"
+                [attr.rel]="serviceTarget(s) ? 'noopener noreferrer' : null"
+                class="inline-flex items-center justify-center gap-2 w-full rounded-xl border border-slate-300 bg-white text-slate-900 px-4 py-3 text-sm font-semibold hover:bg-slate-50 transition-colors"
+              >
+                Abrir enlace
+                <span>↗</span>
+              </a>
+            </ng-template>
           </div>
         </div>
-      </div>
+      </article>
     </div>
-  </ng-template>
+  </ng-container>
 </section>
 
-<!-- 4) ACCESOS RÁPIDOS / EMERGENCIAS (desde Strapi) -->
+<!-- 3) AGENDA Y EVENTOS -->
+<section class="max-w-6xl mx-auto px-6 py-12">
+  <div class="flex items-end justify-between gap-4 flex-wrap">
+    <div>
+      <p class="text-sm font-semibold uppercase tracking-wide text-blue-800">
+        Agenda municipal
+      </p>
+      <h2 class="text-3xl font-bold text-slate-900 mt-1">
+        Agenda y eventos
+      </h2>
+      <p class="text-slate-600 mt-2 text-base">
+        Actividades, operativos y anuncios del municipio.
+      </p>
+    </div>
+
+    <a
+      routerLink="/noticias"
+      class="inline-flex items-center gap-2 text-sm font-semibold text-blue-900 hover:text-blue-700 underline underline-offset-4"
+    >
+      Ver agenda
+      <span>→</span>
+    </a>
+  </div>
+
+  <ng-container *ngIf="(events$ | async) as events">
+    <div
+      *ngIf="events.length === 0"
+      class="mt-8 rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-slate-600"
+    >
+      No hay eventos cargados todavía.
+    </div>
+
+    <div
+      *ngIf="events.length > 0"
+      class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8"
+    >
+      <article
+        *ngFor="let e of events"
+        class="group rounded-3xl border border-slate-200 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+      >
+        <div class="p-6">
+          <!-- Cabecera: fecha -->
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-100 flex flex-col items-center justify-center leading-none">
+                <div class="text-xs font-bold text-blue-700 uppercase">
+                  {{ e.startAt | date:'MMM' }}
+                </div>
+                <div class="text-xl font-extrabold text-slate-900 -mt-0.5">
+                  {{ e.startAt | date:'dd' }}
+                </div>
+              </div>
+
+              <div>
+                <p class="text-sm text-slate-500">
+                  {{ e.startAt | date:'dd/MM/yyyy' }} • {{ e.startAt | date:'HH:mm' }}
+                  <ng-container *ngIf="e.endAt">
+                    – {{ e.endAt | date:'HH:mm' }}
+                  </ng-container>
+                </p>
+
+                <h3 class="text-xl font-bold text-slate-900 mt-1 leading-snug">
+                  {{ e.title }}
+                </h3>
+              </div>
+            </div>
+
+            <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-slate-50 text-slate-700 border border-slate-200">
+              Evento
+            </span>
+          </div>
+
+          <!-- Ubicación + excerpt -->
+          <div class="mt-4">
+            <p *ngIf="e.location" class="text-sm text-slate-700 flex items-center gap-2">
+              <span class="text-base">📍</span>
+              <span class="truncate">{{ e.location }}</span>
+            </p>
+
+            <p class="text-sm text-slate-600 mt-2 min-h-[44px]">
+              {{ e.excerpt || 'Actividad programada por el municipio.' }}
+            </p>
+          </div>
+
+          <!-- CTA -->
+          <div class="mt-6">
+            <!-- Si hay URL externa -->
+            <a
+              *ngIf="e.url; else internalEvent"
+              [href]="e.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center gap-2 w-full rounded-xl border border-slate-300 bg-white text-slate-900 px-4 py-3 text-sm font-semibold hover:bg-slate-50 transition-colors"
+            >
+              Ver detalle
+              <span>↗</span>
+            </a>
+
+            <!-- Si no hay URL, va a noticias (por ahora) -->
+            <ng-template #internalEvent>
+              <a
+                routerLink="/noticias"
+                class="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-slate-900 text-white px-4 py-3 text-sm font-semibold hover:bg-blue-900 transition-colors"
+              >
+                Ver detalle
+                <span>→</span>
+              </a>
+            </ng-template>
+          </div>
+        </div>
+      </article>
+    </div>
+  </ng-container>
+</section>
+
+<!-- 4) ACCESOS RÁPIDOS / EMERGENCIAS -->
 <section class="max-w-6xl mx-auto px-6 pb-14">
-  <div class="rounded-3xl bg-slate-900 text-white p-8 md:p-10 shadow-xl">
-    <div class="flex items-start justify-between gap-6 flex-wrap">
+  <div class="rounded-3xl bg-slate-900 text-white p-8 md:p-10 shadow-xl overflow-hidden relative">
+    <!-- detalle decorativo -->
+    <div class="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-white/5 blur-2xl"></div>
+
+    <div class="relative flex items-start justify-between gap-6 flex-wrap">
       <div>
-        <h2 class="text-xl md:text-2xl font-bold">Accesos rápidos y emergencias</h2>
-        <p class="text-white/75 mt-1">Contactos importantes para vecinos.</p>
+        <p class="text-sm font-semibold uppercase tracking-wide text-white/70">
+          Accesos rápidos
+        </p>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">
+          Emergencias y contactos
+        </h2>
+        <p class="text-white/75 mt-2">
+          Canales oficiales para asistencia y reclamos.
+        </p>
       </div>
 
-      <a routerLink="/contacto" class="text-sm font-medium underline underline-offset-4 hover:opacity-90">
+      <a
+        routerLink="/contacto"
+        class="text-sm font-semibold underline underline-offset-4 hover:opacity-90"
+      >
         Ir a contacto
       </a>
     </div>
 
     <ng-container *ngIf="(emergencies$ | async) as ems">
-      <div *ngIf="ems.length === 0" class="text-white/80 mt-6">
-        No hay emergencias cargadas.
+      <div *ngIf="ems.length === 0" class="relative mt-8 rounded-2xl bg-white/10 border border-white/10 px-5 py-4 text-white/80">
+        No hay contactos de emergencia cargados todavía.
       </div>
 
-      <div *ngIf="ems.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
+      <div *ngIf="ems.length > 0" class="relative grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
         <a
           *ngFor="let e of ems"
           [href]="emergencyHref(e)"
-          target="_blank"
-          rel="noopener"
-          class="rounded-2xl bg-white/10 border border-white/10 p-6 hover:bg-white/15 transition"
+          [attr.target]="emergencyTarget(e)"
+          rel="noopener noreferrer"
+          class="group rounded-2xl bg-white/10 border border-white/10 p-6 hover:bg-white/15 transition"
         >
-          <p class="text-lg font-semibold">{{ e.title }}</p>
-          <p class="text-white/75 text-sm mt-1">{{ e.description }}</p>
-          <p class="text-2xl font-bold mt-4">{{ e.phone }}</p>
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex items-start gap-3">
+              <div class="w-12 h-12 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-xl">
+                {{ emergencyIcon(e) }}
+              </div>
+
+              <div class="min-w-0">
+                <p class="text-lg font-bold leading-snug truncate">
+                  {{ e.title }}
+                </p>
+                <p class="text-white/75 text-sm mt-1 line-clamp-2">
+                  {{ e.description || 'Canal de asistencia' }}
+                </p>
+              </div>
+            </div>
+
+            <span
+              class="shrink-0 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-white/10 border border-white/10 text-white/90"
+            >
+              {{ emergencyCta(e) }}
+            </span>
+          </div>
+
+          <div class="mt-5 pt-5 border-t border-white/10 flex items-center justify-between gap-4">
+            <p class="text-2xl font-extrabold tracking-tight">
+              {{ e.phone || '—' }}
+            </p>
+
+            <span class="text-sm font-semibold underline underline-offset-4 opacity-90 group-hover:opacity-100">
+              {{ emergencyCta(e) }} →
+            </span>
+          </div>
         </a>
       </div>
     </ng-container>
