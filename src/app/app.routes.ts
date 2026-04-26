@@ -6,6 +6,9 @@ import { ContactComponent } from './pages/contact/contact';
 import { TourismComponent } from './pages/tourism/tourism';
 import { TourismDetail } from './pages/tourism-detail/tourism-detail';
 import { SecretariaComponent } from './pages/secretaria/secretaria';
+import { TramitesComponent } from './pages/tramites/tramites';
+import { TramiteDetailComponent } from './pages/tramite-detail/tramite-detail';
+
 
 
 
@@ -28,7 +31,10 @@ export const routes: Routes = [
 
   { path: '**', redirectTo: '' },
 
-  { path: 'tramites', loadComponent: () => import('./pages/tramites/tramites').then(m => m.Tramites) },
+  { path: 'tramites', loadComponent: () => import('./pages/tramites/tramites').then(m => m.TramitesComponent) },
 { path: 'agenda', loadComponent: () => import('./pages/agenda/agenda').then(m => m.Agenda) },
+
+{ path: 'tramites', component: TramitesComponent },
+{ path: 'tramites/:slug', component: TramiteDetailComponent },
   
 ];

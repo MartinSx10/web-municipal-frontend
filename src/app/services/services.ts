@@ -57,7 +57,7 @@ export class ServicesService {
     }
 
     // internal
-    return s.url && s.url.startsWith('/') ? s.url : '/contacto';
+    return s.url && s.url.startsWith('/') ? s.url : '/tramites';
   }
 
   isExternal(s: ServiceItem): boolean {

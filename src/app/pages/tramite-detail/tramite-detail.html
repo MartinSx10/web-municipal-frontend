@@ -1,0 +1,99 @@
+<section class="max-w-6xl mx-auto px-6 py-10">
+  <ng-container *ngIf="(tramite$ | async) as t; else loading">
+    <div *ngIf="!t" class="text-gray-700">
+      <p class="font-semibold">No encontramos el trámite.</p>
+      <a routerLink="/tramites" class="text-blue-900 underline">Volver</a>
+    </div>
+
+    <ng-container *ngIf="t">
+      <a routerLink="/tramites" class="text-sm font-medium text-blue-900 underline underline-offset-4">
+        ← Volver a trámites
+      </a>
+
+      <div class="mt-5 bg-white rounded-3xl shadow p-7">
+        <div class="flex items-start gap-4">
+          <div class="text-4xl leading-none">{{ t.icon || '📄' }}</div>
+
+          <div class="min-w-0">
+            <h1 class="text-2xl sm:text-3xl font-bold">{{ t.title }}</h1>
+            <p class="text-gray-600 mt-1">{{ t.subtitle || t.excerpt }}</p>
+
+            <div class="flex flex-wrap gap-2 mt-4">
+              <span class="text-xs font-semibold bg-slate-100 text-slate-700 px-3 py-1 rounded-full">
+                {{ modalityLabel(t.modality) }}
+              </span>
+
+              <span *ngIf="t.needsAppointment"
+                class="text-xs font-semibold bg-amber-100 text-amber-800 px-3 py-1 rounded-full">
+                Requiere turno
+              </span>
+
+              <span *ngIf="!t.needsAppointment"
+                class="text-xs font-semibold bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full">
+                Sin turno
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info rápida -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-7">
+          <div class="rounded-2xl border border-slate-200 p-5">
+            <p class="text-sm font-semibold text-slate-800">📍 Lugar de atención</p>
+            <p class="text-slate-700 mt-1">{{ t.place || '—' }}</p>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 p-5">
+            <p class="text-sm font-semibold text-slate-800">🕒 Horarios</p>
+            <p class="text-slate-700 mt-1">{{ t.schedule || '—' }}</p>
+          </div>
+        </div>
+
+        <!-- Links -->
+        <div class="flex flex-wrap gap-3 mt-6">
+          <a
+            *ngIf="t.primaryUrl"
+            [href]="t.primaryUrl"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 rounded-xl bg-blue-900 text-white px-4 py-2 text-sm font-semibold hover:opacity-90"
+          >
+            Abrir enlace
+            <span class="opacity-90">→</span>
+          </a>
+
+          <a
+            *ngIf="t.secondaryUrl"
+            [href]="t.secondaryUrl"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+          >
+            Segundo enlace
+          </a>
+        </div>
+
+        <!-- Guía (texto) -->
+        <div class="mt-8">
+          <h2 class="text-lg font-bold">Guía</h2>
+
+          <div class="mt-3 rounded-2xl bg-slate-50 border border-slate-200 p-5">
+            <pre class="whitespace-pre-wrap text-slate-800 text-sm leading-relaxed m-0">{{ t.notes || 'Sin guía por ahora.' }}</pre>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="bg-white rounded-3xl shadow p-7 animate-pulse">
+      <div class="h-5 w-40 bg-slate-200 rounded"></div>
+      <div class="h-8 w-2/3 bg-slate-200 rounded mt-4"></div>
+      <div class="h-4 w-1/2 bg-slate-200 rounded mt-3"></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-7">
+        <div class="h-24 bg-slate-200 rounded-2xl"></div>
+        <div class="h-24 bg-slate-200 rounded-2xl"></div>
+      </div>
+    </div>
+  </ng-template>
+</section>
