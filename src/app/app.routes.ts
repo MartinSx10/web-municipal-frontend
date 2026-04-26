@@ -6,12 +6,12 @@ import { ContactComponent } from './pages/contact/contact';
 import { TourismComponent } from './pages/tourism/tourism';
 import { TourismDetail } from './pages/tourism-detail/tourism-detail';
 import { SecretariaComponent } from './pages/secretaria/secretaria';
+
 import { TramitesComponent } from './pages/tramites/tramites';
 import { TramiteDetailComponent } from './pages/tramite-detail/tramite-detail';
 
-
-
-
+// si tu agenda es standalone, importala así (ajustá el nombre/clase si es distinto):
+import { Agenda } from './pages/agenda/agenda';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -20,21 +20,16 @@ export const routes: Routes = [
   { path: 'noticias/:slug', component: NewsDetailComponent },
 
   { path: 'contacto', component: ContactComponent },
- 
 
   { path: 'turismo', component: TourismComponent },
   { path: 'turismo/:slug', component: TourismDetail },
 
-  
   { path: 'gobierno/:slug', component: SecretariaComponent },
-   
+
+  { path: 'tramites', component: TramitesComponent },
+  { path: 'tramites/:slug', component: TramiteDetailComponent },
+
+  { path: 'agenda', component: Agenda },
 
   { path: '**', redirectTo: '' },
-
-  { path: 'tramites', loadComponent: () => import('./pages/tramites/tramites').then(m => m.TramitesComponent) },
-{ path: 'agenda', loadComponent: () => import('./pages/agenda/agenda').then(m => m.Agenda) },
-
-{ path: 'tramites', component: TramitesComponent },
-{ path: 'tramites/:slug', component: TramiteDetailComponent },
-  
 ];

@@ -65,15 +65,22 @@
 
   <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/70"></div>
 
-  <div class="relative max-w-6xl mx-auto px-6 h-full flex items-end justify-start">
-    <div class="pb-8 md:pb-12">
-      <p class="text-xs md:text-sm uppercase tracking-widest text-white/80">Portal oficial</p>
+  <!-- ✅ FIX: bloque siempre abajo a la izquierda -->
+  <div class="absolute inset-0">
+    <div class="max-w-6xl mx-auto px-6 h-full relative">
+      <div class="absolute left-6 bottom-8 md:bottom-12">
+        <p class="text-xs md:text-sm uppercase tracking-widest text-white/80">
+          Portal oficial
+        </p>
 
-      <h1 class="text-3xl md:text-5xl font-bold mt-2 leading-tight">
-        Municipalidad Dpto San Martín
-      </h1>
+        <h1 class="text-3xl md:text-5xl font-bold mt-2 leading-tight">
+          Municipalidad Dpto San Martín
+        </h1>
 
-      <p class="mt-2 text-white/85">Ulapes — La Rioja</p>
+        <p class="mt-2 text-white/85">
+          Ulapes — La Rioja
+        </p>
+      </div>
     </div>
   </div>
 </section>
@@ -98,27 +105,31 @@
 
     <div *ngIf="latest.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
       <article *ngFor="let n of latest" class="bg-white rounded-2xl shadow p-5 transition hover:shadow-lg">
-        <div class="rounded-xl overflow-hidden">
+        <!-- ✅ FIX: clic en imagen abre el detalle -->
+        <a [routerLink]="['/noticias', n.slug]" class="block rounded-xl overflow-hidden group">
           <img
             *ngIf="n.coverUrl; else noImg"
             [src]="n.coverUrl"
-            class="w-full aspect-[16/10] object-cover"
+            class="w-full aspect-[16/10] object-cover group-hover:scale-[1.01] transition"
             alt="Imagen de la noticia"
             loading="lazy"
           />
           <ng-template #noImg>
             <div class="w-full aspect-[16/10] bg-gray-200"></div>
           </ng-template>
-        </div>
+        </a>
 
         <div class="mt-4">
           <p class="text-xs text-gray-500">
             {{ n.publishedAt | date : 'dd/MM/yyyy' }}
           </p>
 
-          <h3 class="text-lg font-semibold mt-1 leading-snug">
-            {{ n.title }}
-          </h3>
+          <!-- (opcional) también clic en título -->
+          <a [routerLink]="['/noticias', n.slug]" class="block">
+            <h3 class="text-lg font-semibold mt-1 leading-snug hover:underline underline-offset-4">
+              {{ n.title }}
+            </h3>
+          </a>
 
           <p
             class="text-gray-600 text-sm mt-2 overflow-hidden text-ellipsis"
@@ -228,17 +239,17 @@
                 {{
                   s.type === 'external'
                     ? 'Se abrirá en un sitio externo'
-                    : 'Gestión municipal o contacto institucional'
+                    : 'Gestión municipal o guía del trámite'
                 }}
               </span>
             </div>
           </div>
 
           <div class="mt-auto pt-6">
-            <!-- INTERNOS -->
+            <!-- ✅ FIX: internos van a /tramites (por ahora) -->
             <a
               *ngIf="s.type === 'internal'; else externalService"
-              [routerLink]="s.url?.startsWith('/') ? s.url : '/contacto'"
+              routerLink="/tramites"
               class="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-slate-900 text-white px-4 py-3 text-sm font-semibold hover:bg-blue-900 transition-colors"
             >
               Abrir trámite
@@ -305,7 +316,6 @@
         class="group rounded-3xl border border-slate-200 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
       >
         <div class="p-6">
-          <!-- Cabecera: fecha -->
           <div class="flex items-start justify-between gap-4">
             <div class="flex items-center gap-3">
               <div class="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-100 flex flex-col items-center justify-center leading-none">
@@ -336,7 +346,6 @@
             </span>
           </div>
 
-          <!-- Ubicación + excerpt -->
           <div class="mt-4">
             <p *ngIf="e.location" class="text-sm text-slate-700 flex items-center gap-2">
               <span class="text-base">📍</span>
@@ -348,9 +357,7 @@
             </p>
           </div>
 
-          <!-- CTA -->
           <div class="mt-6">
-            <!-- Si hay URL externa -->
             <a
               *ngIf="e.url; else internalEvent"
               [href]="e.url"
@@ -362,7 +369,6 @@
               <span>↗</span>
             </a>
 
-            <!-- Si no hay URL, va a noticias (por ahora) -->
             <ng-template #internalEvent>
               <a
                 routerLink="/noticias"
@@ -382,7 +388,6 @@
 <!-- 4) ACCESOS RÁPIDOS / EMERGENCIAS -->
 <section class="max-w-6xl mx-auto px-6 pb-14">
   <div class="rounded-3xl bg-slate-900 text-white p-8 md:p-10 shadow-xl overflow-hidden relative">
-    <!-- detalle decorativo -->
     <div class="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-white/5 blur-2xl"></div>
 
     <div class="relative flex items-start justify-between gap-6 flex-wrap">
@@ -398,10 +403,7 @@
         </p>
       </div>
 
-      <a
-        routerLink="/contacto"
-        class="text-sm font-semibold underline underline-offset-4 hover:opacity-90"
-      >
+      <a routerLink="/contacto" class="text-sm font-semibold underline underline-offset-4 hover:opacity-90">
         Ir a contacto
       </a>
     </div>
@@ -419,7 +421,6 @@
           rel="noopener noreferrer"
           class="group rounded-2xl bg-white/10 border border-white/10 p-6 hover:bg-white/15 transition"
         >
-          <!-- ✅ FIX: min-w-0 en header + bloque izquierdo -->
           <div class="flex items-start justify-between gap-4 min-w-0">
             <div class="flex items-start gap-3 min-w-0">
               <div class="w-12 h-12 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-xl shrink-0">
@@ -431,23 +432,18 @@
                   {{ e.title }}
                 </p>
 
-                <!-- si no tenés line-clamp plugin, avisame y lo dejamos con style -->
                 <p class="text-white/75 text-sm mt-1 line-clamp-2">
                   {{ e.description || 'Canal de asistencia' }}
                 </p>
               </div>
             </div>
 
-            <!-- ✅ FIX: pill no se rompe y no empuja -->
-            <span
-              class="shrink-0 inline-flex items-center whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold bg-white/10 border border-white/10 text-white/90"
-            >
+            <span class="shrink-0 inline-flex items-center whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold bg-white/10 border border-white/10 text-white/90">
               {{ emergencyCta(e) }}
             </span>
           </div>
 
           <div class="mt-5 pt-5 border-t border-white/10 flex items-center justify-between gap-4">
-            <!-- ✅ FIX: números largos pueden partirse sin romper la card -->
             <p class="text-2xl font-extrabold tracking-tight break-words">
               {{ e.phone || '—' }}
             </p>
