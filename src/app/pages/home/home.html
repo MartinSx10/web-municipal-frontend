@@ -89,116 +89,118 @@
 <div class="bg-slate-50">
 
   <!-- 1) NOVEDADES (banda blanca) -->
-  <section class="bg-white border-y border-slate-100">
-    <div class="max-w-6xl mx-auto px-6 py-14">
-      <div class="flex items-end justify-between gap-4 flex-wrap">
-        <div>
-          <p class="text-sm font-semibold uppercase tracking-[0.18em] text-blue-700">
-            Actualidad municipal
-          </p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2">
-            Últimas novedades
-          </h2>
-          <p class="text-slate-600 mt-2 text-sm sm:text-base max-w-2xl">
-            Noticias, anuncios y actividades recientes del municipio.
-          </p>
-        </div>
-
-        <a
-          routerLink="/noticias"
-          class="inline-flex items-center gap-2 text-sm font-semibold text-slate-900 underline underline-offset-4 hover:opacity-80"
-        >
-          Ver todas <span>→</span>
-        </a>
+<section class="bg-white border-y border-slate-100">
+  <div class="max-w-6xl mx-auto px-6 py-14">
+    <div class="flex items-end justify-between gap-4 flex-wrap">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-[0.18em] text-blue-700">
+          Actualidad municipal
+        </p>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2">
+          Últimas novedades
+        </h2>
+        <p class="text-slate-600 mt-2 text-sm sm:text-base max-w-2xl">
+          Noticias, anuncios y actividades recientes del municipio.
+        </p>
       </div>
 
-      <ng-container *ngIf="(latest$ | async) as latest; else loadingTpl">
-        <div *ngIf="latest.length === 0" class="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-6 text-slate-600">
-          No hay novedades todavía.
-        </div>
+      <a
+        routerLink="/noticias"
+        class="inline-flex items-center gap-2 text-sm font-semibold text-slate-900 underline underline-offset-4 hover:opacity-80"
+      >
+        Ver todas <span>→</span>
+      </a>
+    </div>
 
-        <div *ngIf="latest.length > 0" class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <a
-            *ngFor="let n of latest; let i = index"
-            [routerLink]="['/noticias', n.slug]"
-            class="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm hover:shadow-xl transition"
-            [ngClass]="i === 0 ? 'lg:col-span-2' : ''"
-          >
-            <div class="relative overflow-hidden" [ngClass]="i === 0 ? 'h-72 sm:h-80' : 'h-56'">
-              <img
-                *ngIf="n.coverUrl; else noImg"
-                [src]="n.coverUrl"
-                [alt]="n.title"
-                class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
-                loading="lazy"
-              />
+    <ng-container *ngIf="(latest$ | async) as latest; else loadingTplNews">
+      <div *ngIf="latest.length === 0" class="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-6 text-slate-600">
+        No hay novedades todavía.
+      </div>
 
-              <ng-template #noImg>
-                <div class="w-full h-full bg-slate-200"></div>
-              </ng-template>
+      <div *ngIf="latest.length > 0" class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <a
+          *ngFor="let n of latest; let i = index"
+          [routerLink]="['/noticias', n.slug]"
+          class="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm hover:shadow-xl transition"
+          [ngClass]="i === 0 ? 'lg:col-span-2' : ''"
+        >
+          <div class="relative overflow-hidden" [ngClass]="i === 0 ? 'h-72 sm:h-80' : 'h-56'">
+            <img
+              *ngIf="n.coverUrl; else noImgNews"
+              [src]="n.coverUrl"
+              [alt]="n.title"
+              class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+              loading="lazy"
+            />
 
-              <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent"></div>
+            <ng-template #noImgNews>
+              <div class="w-full h-full bg-slate-200"></div>
+            </ng-template>
 
-              <div class="absolute top-4 left-4">
-                <span class="inline-flex items-center rounded-full bg-white/90 backdrop-blur px-3 py-1 text-xs font-semibold text-slate-800 shadow-sm">
-                  Novedad
-                </span>
-              </div>
-            </div>
+            <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent"></div>
 
-            <div class="p-5 sm:p-6">
-              <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
-                {{ n.publishedAt | date:'dd/MM/yyyy' }}
-              </p>
-
-              <h3
-                class="mt-2 font-extrabold text-slate-900 leading-snug group-hover:text-blue-900 transition-colors"
-                [ngClass]="i === 0 ? 'text-2xl' : 'text-xl'"
-              >
-                {{ n.title }}
-              </h3>
-
-              <p
-                class="mt-3 text-slate-600 text-sm sm:text-base overflow-hidden"
-                [style.display]="'-webkit-box'"
-                [style.webkitBoxOrient]="'vertical'"
-                [style.webkitLineClamp]="i === 0 ? '3' : '2'"
-              >
-                {{ n.excerpt }}
-              </p>
-
-              <div class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-blue-900">
-                Leer noticia
-                <span class="group-hover:translate-x-1 transition-transform">→</span>
-              </div>
-            </div>
-          </a>
-        </div>
-      </ng-container>
-
-      <ng-template #loadingTpl>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
-          <div
-            *ngFor="let _ of [1,2,3]"
-            class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm animate-pulse"
-          >
-            <div class="h-56 bg-slate-200"></div>
-            <div class="p-6">
-              <div class="h-3 w-24 bg-slate-200 rounded"></div>
-              <div class="h-6 w-4/5 bg-slate-200 rounded mt-4"></div>
-              <div class="h-4 w-full bg-slate-200 rounded mt-4"></div>
-              <div class="h-4 w-5/6 bg-slate-200 rounded mt-2"></div>
-              <div class="h-4 w-32 bg-slate-200 rounded mt-5"></div>
+            <div class="absolute top-4 left-4">
+              <span class="inline-flex items-center rounded-full bg-white/90 backdrop-blur px-3 py-1 text-xs font-semibold text-slate-800 shadow-sm">
+                Novedad
+              </span>
             </div>
           </div>
-        </div>
-      </ng-template>
-    </div>
-  </section>
 
-  <!-- 2) SERVICIOS Y TRÁMITES (banda gris suave) -->
-  <section class="bg-slate-50 border-y border-slate-100">
-    <div class="max-w-6xl mx-auto px-6 py-14">
+          <div class="p-5 sm:p-6">
+            <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+              {{ n.publishedAt | date:'dd/MM/yyyy' }}
+            </p>
+
+            <h3
+              class="mt-2 font-extrabold text-slate-900 leading-snug group-hover:text-blue-900 transition-colors"
+              [ngClass]="i === 0 ? 'text-2xl' : 'text-xl'"
+            >
+              {{ n.title }}
+            </h3>
+
+            <p
+              class="mt-3 text-slate-600 text-sm sm:text-base overflow-hidden"
+              [style.display]="'-webkit-box'"
+              [style.webkitBoxOrient]="'vertical'"
+              [style.webkitLineClamp]="i === 0 ? '3' : '2'"
+            >
+              {{ n.excerpt }}
+            </p>
+
+            <div class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-blue-900">
+              Leer noticia
+              <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </ng-container>
+
+    <ng-template #loadingTplNews>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+        <div
+          *ngFor="let _ of [1,2,3]"
+          class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm animate-pulse"
+        >
+          <div class="h-56 bg-slate-200"></div>
+          <div class="p-6">
+            <div class="h-3 w-24 bg-slate-200 rounded"></div>
+            <div class="h-6 w-4/5 bg-slate-200 rounded mt-4"></div>
+            <div class="h-4 w-full bg-slate-200 rounded mt-4"></div>
+            <div class="h-4 w-5/6 bg-slate-200 rounded mt-2"></div>
+            <div class="h-4 w-32 bg-slate-200 rounded mt-5"></div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</section>
+
+
+<!-- 2) SERVICIOS Y TRÁMITES (banda suave + módulo) -->
+<section class="bg-slate-50/70 border-y border-slate-100 border-t-4 border-blue-700">
+  <div class="max-w-6xl mx-auto px-6 py-14">
+    <div class="rounded-[32px] border border-slate-200 bg-white shadow-sm p-6 sm:p-8">
       <div class="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <p class="text-sm font-semibold uppercase tracking-[0.18em] text-blue-700">
@@ -221,7 +223,7 @@
       </div>
 
       <ng-container *ngIf="(services$ | async) as services">
-        <div *ngIf="services.length === 0" class="mt-8 rounded-2xl border border-slate-200 bg-white p-6 text-slate-600">
+        <div *ngIf="services.length === 0" class="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-6 text-slate-600">
           Todavía no hay servicios cargados.
         </div>
 
@@ -288,14 +290,17 @@
         </div>
       </ng-container>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- 3) AGENDA Y EVENTOS (banda blanca) -->
-  <section class="bg-white border-y border-slate-100">
-    <div class="max-w-6xl mx-auto px-6 py-14">
+
+<!-- 3) AGENDA Y EVENTOS (banda suave + módulo) -->
+<section class="bg-slate-50/80 border-y border-slate-100 border-t-4 border-indigo-600">
+  <div class="max-w-6xl mx-auto px-6 py-14">
+    <div class="rounded-[32px] border border-slate-200 bg-white shadow-sm p-6 sm:p-8">
       <div class="flex items-end justify-between gap-4 flex-wrap">
         <div>
-          <p class="text-sm font-semibold uppercase tracking-[0.18em] text-blue-700">
+          <p class="text-sm font-semibold uppercase tracking-[0.18em] text-indigo-700">
             Agenda municipal
           </p>
           <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2">
@@ -329,11 +334,11 @@
           >
             <div class="p-6 flex gap-5">
               <!-- Fecha -->
-              <div class="w-16 shrink-0 rounded-2xl bg-slate-900 text-white p-3 text-center">
-                <p class="text-xs font-semibold opacity-80">
+              <div class="w-16 shrink-0 rounded-2xl bg-indigo-950 text-white p-3 text-center shadow-sm">
+                <p class="text-xs font-semibold uppercase opacity-80">
                   {{ e.startAt | date:'MMM' }}
                 </p>
-                <p class="text-2xl font-extrabold leading-none">
+                <p class="text-2xl font-extrabold leading-none mt-1">
                   {{ e.startAt | date:'dd' }}
                 </p>
                 <p class="text-xs mt-2 opacity-80">
@@ -342,8 +347,8 @@
               </div>
 
               <div class="min-w-0 flex-1">
-                <div class="flex items-center gap-2">
-                  <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold border bg-blue-50 text-blue-800 border-blue-100">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold border bg-indigo-50 text-indigo-800 border-indigo-100">
                     Evento
                   </span>
                   <span class="text-xs text-slate-500">
@@ -351,16 +356,16 @@
                   </span>
                 </div>
 
-                <h3 class="mt-2 text-xl font-extrabold text-slate-900">
+                <h3 class="mt-3 text-xl font-extrabold text-slate-900 leading-snug">
                   {{ e.title }}
                 </h3>
 
-                <p class="mt-2 text-sm text-slate-700 flex items-center gap-2">
+                <p class="mt-3 text-sm text-slate-700 flex items-center gap-2">
                   <span class="text-base">📍</span>
                   <span class="truncate">{{ e.location }}</span>
                 </p>
 
-                <p class="text-sm text-slate-600 mt-2 min-h-[44px]">
+                <p class="text-sm text-slate-600 mt-3 min-h-[44px]">
                   {{ e.excerpt || 'Actividad programada por el municipio.' }}
                 </p>
 
@@ -370,7 +375,7 @@
                     [href]="e.url"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="inline-flex items-center gap-2 text-sm font-semibold text-blue-900 underline underline-offset-4"
+                    class="inline-flex items-center gap-2 text-sm font-semibold text-indigo-900 underline underline-offset-4"
                   >
                     Ver detalle <span>↗</span>
                   </a>
@@ -378,7 +383,7 @@
                   <ng-template #internalEvent>
                     <a
                       routerLink="/agenda"
-                      class="inline-flex items-center gap-2 text-sm font-semibold text-blue-900 underline underline-offset-4"
+                      class="inline-flex items-center gap-2 text-sm font-semibold text-indigo-900 underline underline-offset-4"
                     >
                       Ver detalle <span>→</span>
                     </a>
@@ -394,103 +399,102 @@
         </p>
       </ng-container>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- 4) EMERGENCIAS Y CONTACTO (banda gris suave) -->
-  <section class="bg-slate-50 border-y border-slate-100">
-    <div class="max-w-6xl mx-auto px-6 py-14">
-      <!-- contenedor suave (no tan oscuro) -->
-      <div class="rounded-3xl border border-slate-200 bg-gradient-to-b from-slate-50 to-white p-6 md:p-8 shadow-sm">
-        <div class="flex items-start justify-between gap-6 flex-wrap">
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">
-              Accesos rápidos
-            </p>
-            <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mt-1">
-              Emergencias y contactos
-            </h2>
-            <p class="text-slate-600 mt-2">
-              Canales oficiales para asistencia y reclamos.
-            </p>
-          </div>
 
-          <a
-            routerLink="/contacto"
-            class="text-sm font-semibold text-blue-900 underline underline-offset-4 hover:opacity-90"
-          >
-            Ir a contacto →
-          </a>
+<!-- 4) EMERGENCIAS Y CONTACTO (banda suave + módulo) -->
+<section class="bg-slate-50/70 border-y border-slate-100 border-t-4 border-emerald-600">
+  <div class="max-w-6xl mx-auto px-6 py-14">
+    <div class="rounded-[32px] border border-slate-200 bg-white shadow-sm p-6 sm:p-8">
+      <div class="flex items-start justify-between gap-6 flex-wrap">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">
+            Accesos rápidos
+          </p>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mt-1">
+            Emergencias y contactos
+          </h2>
+          <p class="text-slate-600 mt-2">
+            Canales oficiales para asistencia y reclamos.
+          </p>
         </div>
 
-        <ng-container *ngIf="(emergencies$ | async) as ems">
-          <div
-            *ngIf="ems.length === 0"
-            class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 text-slate-600"
-          >
-            No hay contactos de emergencia cargados todavía.
-          </div>
+        <a
+          routerLink="/contacto"
+          class="text-sm font-semibold text-blue-900 underline underline-offset-4 hover:opacity-90"
+        >
+          Ir a contacto →
+        </a>
+      </div>
 
-          <div
-            *ngIf="ems.length > 0"
-            class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5"
-          >
-            <a
-              *ngFor="let e of ems"
-              [href]="emergencyHref(e)"
-              rel="noopener noreferrer"
-              class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition"
-            >
-              <div class="flex items-start justify-between gap-4">
-                <div class="flex items-start gap-3 min-w-0">
-                  <div
-                    class="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center text-xl shrink-0"
-                    aria-hidden="true"
-                  >
-                    <ng-container [ngSwitch]="e.type">
-                      <span *ngSwitchCase="'whatsapp'">💬</span>
-                      <span *ngSwitchCase="'url'">🔗</span>
-                      <span *ngSwitchDefault>📞</span>
-                    </ng-container>
-                  </div>
+      <ng-container *ngIf="(emergencies$ | async) as ems">
+        <div
+          *ngIf="ems.length === 0"
+          class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5 text-slate-600"
+        >
+          No hay contactos de emergencia cargados todavía.
+        </div>
 
-                  <div class="min-w-0">
-                    <p class="text-base font-extrabold text-slate-900 truncate">
-                      {{ e.title }}
-                    </p>
-                    <p class="text-sm text-slate-600 mt-1 line-clamp-2">
-                      {{ e.description || 'Canal de asistencia' }}
-                    </p>
-                  </div>
+        <div
+          *ngIf="ems.length > 0"
+          class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5"
+        >
+          <a
+            *ngFor="let e of ems"
+            [href]="emergencyHref(e)"
+            rel="noopener noreferrer"
+            class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition"
+          >
+            <div class="flex items-start justify-between gap-4">
+              <div class="flex items-start gap-3 min-w-0">
+                <div
+                  class="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center text-xl shrink-0"
+                  aria-hidden="true"
+                >
+                  <ng-container [ngSwitch]="e.type">
+                    <span *ngSwitchCase="'whatsapp'">💬</span>
+                    <span *ngSwitchCase="'url'">🔗</span>
+                    <span *ngSwitchDefault>📞</span>
+                  </ng-container>
                 </div>
 
-                <span
-                  class="shrink-0 inline-flex items-center rounded-full px-3 py-1 text-xs font-bold border whitespace-nowrap"
-                  [ngClass]="
-                    e.type === 'whatsapp'
-                      ? 'bg-green-50 text-green-700 border-green-200'
-                      : e.type === 'url'
-                      ? 'bg-amber-50 text-amber-800 border-amber-200'
-                      : 'bg-blue-50 text-blue-800 border-blue-200'
-                  "
-                >
-                  {{ e.type === 'whatsapp' ? 'WhatsApp' : (e.type === 'url' ? 'Link' : 'Llamar') }}
-                </span>
+                <div class="min-w-0">
+                  <p class="text-base font-extrabold text-slate-900 truncate">
+                    {{ e.title }}
+                  </p>
+                  <p class="text-sm text-slate-600 mt-1 line-clamp-2">
+                    {{ e.description || 'Canal de asistencia' }}
+                  </p>
+                </div>
               </div>
 
-              <div class="mt-5 pt-5 border-t border-slate-200 flex items-center justify-between gap-4">
-                <p class="text-2xl font-extrabold tracking-tight text-slate-900 break-words">
-                  {{ e.phone || '—' }}
-                </p>
+              <span
+                class="shrink-0 inline-flex items-center rounded-full px-3 py-1 text-xs font-bold border whitespace-nowrap"
+                [ngClass]="
+                  e.type === 'whatsapp'
+                    ? 'bg-green-50 text-green-700 border-green-200'
+                    : e.type === 'url'
+                    ? 'bg-amber-50 text-amber-800 border-amber-200'
+                    : 'bg-blue-50 text-blue-800 border-blue-200'
+                "
+              >
+                {{ e.type === 'whatsapp' ? 'WhatsApp' : (e.type === 'url' ? 'Link' : 'Llamar') }}
+              </span>
+            </div>
 
-                <span class="shrink-0 text-sm font-semibold text-blue-900 underline underline-offset-4 whitespace-nowrap">
-                  {{ e.type === 'whatsapp' ? 'Abrir' : 'Llamar' }} →
-                </span>
-              </div>
-            </a>
-          </div>
-        </ng-container>
-      </div>
+            <div class="mt-5 pt-5 border-t border-slate-200 flex items-center justify-between gap-4">
+              <p class="text-2xl font-extrabold tracking-tight text-slate-900 break-words">
+                {{ e.phone || '—' }}
+              </p>
+
+              <span class="shrink-0 text-sm font-semibold text-blue-900 underline underline-offset-4 whitespace-nowrap">
+                {{ e.type === 'whatsapp' ? 'Abrir' : 'Llamar' }} →
+              </span>
+            </div>
+          </a>
+        </div>
+      </ng-container>
     </div>
-  </section>
-
-</div>
+  </div>
+</section>
