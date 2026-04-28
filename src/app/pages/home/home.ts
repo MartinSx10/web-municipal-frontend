@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Observable, catchError, of, shareReplay, map } from 'rxjs';
+import { Observable, catchError, of, shareReplay, map, interval, startWith } from 'rxjs';
 
 import { NewsService, NewsItem } from '../../services/news';
 import { NoticeService } from '../../services/notice';
@@ -24,6 +24,14 @@ export class HomeComponent {
   private servicesService = inject(ServicesService);
   private eventsService = inject(EventsService);
   private emergencyService = inject(EmergencyService);
+
+  //Reloj en vivo (se actualiza cada 1 segundo)
+  now$ = interval(1000).pipe(
+    startWith(0),
+    map(() => new Date()),
+    shareReplay(1)
+  );
+  tempC: number |null=null
 
   // 1) Noticias
   latest$: Observable<NewsItem[]> = this.newsService.getLatest(3).pipe(
