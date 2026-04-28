@@ -444,98 +444,103 @@
 </section>
 
 
-<!-- 4) EMERGENCIAS Y CONTACTO (banda suave + módulo) -->
-<section class="bg-slate-50/70 border-y border-slate-100 border-t-4 border-emerald-600">
+<!-- 4) EMERGENCIAS Y CONTACTOS (compacta + banda azul suave) -->
+<section class="bg-gradient-to-b from-sky-50 via-blue-50 to-white border-y border-slate-100">
   <div class="max-w-6xl mx-auto px-6 py-14">
-    <div class="rounded-[32px] border border-slate-200 bg-white shadow-sm p-6 sm:p-8">
-      <div class="flex items-start justify-between gap-6 flex-wrap">
-        <div>
-          <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">
-            Accesos rápidos
-          </p>
-          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mt-1">
-            Emergencias y contactos
-          </h2>
-          <p class="text-slate-600 mt-2">
-            Canales oficiales para asistencia y reclamos.
-          </p>
-        </div>
+    <div class="rounded-[32px] border border-blue-100 bg-white/80 backdrop-blur shadow-sm overflow-hidden">
+      <!-- Header -->
+      <div class="px-6 md:px-8 pt-8 pb-6 border-b border-blue-100 bg-gradient-to-r from-blue-50 to-sky-50">
+        <div class="flex items-start justify-between gap-6 flex-wrap">
+          <div>
+            <p class="text-sm font-semibold uppercase tracking-[0.18em] text-blue-700">
+              Accesos rápidos
+            </p>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2">
+              Emergencias y contactos
+            </h2>
+            <p class="text-slate-600 mt-2 text-sm sm:text-base max-w-2xl">
+              Números y canales oficiales para asistencia, urgencias y reclamos.
+            </p>
+          </div>
 
-        <a
-          routerLink="/contacto"
-          class="text-sm font-semibold text-blue-900 underline underline-offset-4 hover:opacity-90"
-        >
-          Ir a contacto →
-        </a>
-      </div>
-
-      <ng-container *ngIf="(emergencies$ | async) as ems">
-        <div
-          *ngIf="ems.length === 0"
-          class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5 text-slate-600"
-        >
-          No hay contactos de emergencia cargados todavía.
-        </div>
-
-        <div
-          *ngIf="ems.length > 0"
-          class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5"
-        >
           <a
-            *ngFor="let e of ems"
-            [href]="emergencyHref(e)"
-            rel="noopener noreferrer"
-            class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition"
+            routerLink="/contacto"
+            class="inline-flex items-center gap-2 text-sm font-semibold text-slate-900 underline underline-offset-4 hover:opacity-80"
           >
-            <div class="flex items-start justify-between gap-4">
-              <div class="flex items-start gap-3 min-w-0">
-                <div
-                  class="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center text-xl shrink-0"
-                  aria-hidden="true"
-                >
-                  <ng-container [ngSwitch]="e.type">
-                    <span *ngSwitchCase="'whatsapp'">💬</span>
-                    <span *ngSwitchCase="'url'">🔗</span>
-                    <span *ngSwitchDefault>📞</span>
-                  </ng-container>
-                </div>
-
-                <div class="min-w-0">
-                  <p class="text-base font-extrabold text-slate-900 truncate">
-                    {{ e.title }}
-                  </p>
-                  <p class="text-sm text-slate-600 mt-1 line-clamp-2">
-                    {{ e.description || 'Canal de asistencia' }}
-                  </p>
-                </div>
-              </div>
-
-              <span
-                class="shrink-0 inline-flex items-center rounded-full px-3 py-1 text-xs font-bold border whitespace-nowrap"
-                [ngClass]="
-                  e.type === 'whatsapp'
-                    ? 'bg-green-50 text-green-700 border-green-200'
-                    : e.type === 'url'
-                    ? 'bg-amber-50 text-amber-800 border-amber-200'
-                    : 'bg-blue-50 text-blue-800 border-blue-200'
-                "
-              >
-                {{ e.type === 'whatsapp' ? 'WhatsApp' : (e.type === 'url' ? 'Link' : 'Llamar') }}
-              </span>
-            </div>
-
-            <div class="mt-5 pt-5 border-t border-slate-200 flex items-center justify-between gap-4">
-              <p class="text-2xl font-extrabold tracking-tight text-slate-900 break-words">
-                {{ e.phone || '—' }}
-              </p>
-
-              <span class="shrink-0 text-sm font-semibold text-blue-900 underline underline-offset-4 whitespace-nowrap">
-                {{ e.type === 'whatsapp' ? 'Abrir' : 'Llamar' }} →
-              </span>
-            </div>
+            Ir a contacto <span>→</span>
           </a>
         </div>
-      </ng-container>
+      </div>
+
+      <!-- Contenido -->
+      <div class="p-6 md:p-8">
+        <ng-container *ngIf="(emergencies$ | async) as ems">
+          <div
+            *ngIf="ems.length === 0"
+            class="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-slate-600"
+          >
+            No hay contactos de emergencia cargados todavía.
+          </div>
+
+          <div
+            *ngIf="ems.length > 0"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
+            <a
+              *ngFor="let e of ems"
+              [href]="emergencyHref(e)"
+              [attr.target]="emergencyTarget(e)"
+              rel="noopener noreferrer"
+              class="group rounded-2xl border border-blue-100 bg-gradient-to-b from-white to-blue-50/70 p-4 shadow-sm hover:shadow-md hover:border-blue-200 transition"
+            >
+              <!-- parte superior -->
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-start gap-3 min-w-0">
+                  <div
+                    class="w-11 h-11 rounded-2xl bg-white border border-blue-100 flex items-center justify-center text-lg shadow-sm shrink-0"
+                  >
+                    {{ emergencyIcon(e) }}
+                  </div>
+
+                  <div class="min-w-0">
+                    <p class="text-base font-extrabold text-slate-900 leading-tight truncate">
+                      {{ e.title }}
+                    </p>
+                    <p class="text-sm text-slate-600 mt-1 truncate">
+                      {{ e.description || 'Canal oficial' }}
+                    </p>
+                  </div>
+                </div>
+
+                <span
+                  class="shrink-0 inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-bold border whitespace-nowrap"
+                  [ngClass]="
+                    e.type === 'whatsapp'
+                      ? 'bg-green-50 text-green-700 border-green-200'
+                      : e.type === 'url'
+                      ? 'bg-amber-50 text-amber-800 border-amber-200'
+                      : 'bg-blue-50 text-blue-700 border-blue-200'
+                  "
+                >
+                  {{ emergencyCta(e) }}
+                </span>
+              </div>
+
+              <!-- número -->
+              <div class="mt-5 pt-4 border-t border-blue-100">
+                <p class="text-3xl font-extrabold tracking-tight text-blue-950 break-words leading-tight">
+                  {{ e.phone || '—' }}
+                </p>
+
+                <div class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-blue-900">
+                  {{ e.type === 'whatsapp' ? 'Abrir chat' : (e.type === 'url' ? 'Abrir enlace' : 'Llamar ahora') }}
+                  <span class="group-hover:translate-x-1 transition-transform">→</span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </ng-container>
+      </div>
     </div>
   </div>
 </section>
