@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Observable, catchError, of, shareReplay } from 'rxjs';
+import { Observable, catchError, of, shareReplay, map } from 'rxjs';
 
 import { NewsService, NewsItem } from '../../services/news';
 import { NoticeService } from '../../services/notice';
@@ -34,8 +34,8 @@ export class HomeComponent {
     shareReplay(1)
   );
 
-  // 2) Servicios y trámites (Strapi) -> 6 para que se vea completo
-  services$: Observable<ServiceItem[]> = this.servicesService.getAll(6).pipe(
+  // ✅ 2) Services: traemos muchos para poder recortar 4 + 4
+  services$: Observable<ServiceItem[]> = this.servicesService.getAll(50).pipe(
     catchError((err) => {
       console.error('Error cargando services:', err);
       return of([] as ServiceItem[]);
@@ -43,7 +43,19 @@ export class HomeComponent {
     shareReplay(1)
   );
 
-  // 3) Agenda y eventos (Strapi) -> 4 para que se vea más “real”
+  // ✅ 4 internos fijos
+  accessInternal$: Observable<ServiceItem[]> = this.services$.pipe(
+    map((list) => (list ?? []).filter((s) => s.type === 'internal').slice(0, 4)),
+    shareReplay(1)
+  );
+
+  // ✅ 4 externos fijos
+  accessExternal$: Observable<ServiceItem[]> = this.services$.pipe(
+    map((list) => (list ?? []).filter((s) => s.type !== 'internal').slice(0, 4)),
+    shareReplay(1)
+  );
+
+  // 3) Agenda y eventos (Strapi)
   events$: Observable<EventItem[]> = this.eventsService.getUpcoming(4).pipe(
     catchError((err) => {
       console.error('Error cargando events:', err);
@@ -73,18 +85,19 @@ export class HomeComponent {
   emergencyHref = (e: EmergencyItem) => this.emergencyService.buildHref(e);
 
   // UI helpers (Emergencias)
-emergencyIcon = (e: EmergencyItem) => {
-  if (e.type === 'whatsapp') return '💬';
-  if (e.type === 'url') return '🔗';
-  return '📞';
-};
+  emergencyIcon = (e: EmergencyItem) => {
+    if (e.type === 'whatsapp') return '💬';
+    if (e.type === 'url') return '🔗';
+    return '📞';
+  };
 
-emergencyCta = (e: EmergencyItem) => {
-  if (e.type === 'whatsapp') return 'WhatsApp';
-  if (e.type === 'url') return 'Abrir';
-  return 'Llamar';
-};
+  emergencyCta = (e: EmergencyItem) => {
+    if (e.type === 'whatsapp') return 'WhatsApp';
+    if (e.type === 'url') return 'Abrir';
+    return 'Llamar';
+  };
 
-emergencyTarget = (e: EmergencyItem) => (e.type === 'url' || e.type === 'whatsapp' ? '_blank' : null);
+  emergencyTarget = (e: EmergencyItem) =>
+    e.type === 'url' || e.type === 'whatsapp' ? '_blank' : null;
 }
 
