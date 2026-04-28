@@ -9,11 +9,12 @@ import { TramitesService, TramiteItem } from '../../services/tramites';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './tramites.html',
+  styleUrls: ['./tramites.css'],
 })
 export class TramitesComponent {
   private tramitesService = inject(TramitesService);
 
-  tramites$: Observable<TramiteItem[]> = this.tramitesService.getAll(60).pipe(
+  tramites$: Observable<TramiteItem[]> = this.tramitesService.getAll(50).pipe(
     catchError((err) => {
       console.error('Error cargando trámites:', err);
       return of([] as TramiteItem[]);

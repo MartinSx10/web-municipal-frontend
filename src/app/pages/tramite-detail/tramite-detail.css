@@ -1,0 +1,42 @@
+.tramite-prose h1 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0.2rem 0 1rem;
+}
+
+.tramite-prose h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 1.2rem 0 0.6rem;
+}
+
+.tramite-prose h3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin: 1rem 0 0.4rem;
+}
+
+.tramite-prose p {
+  margin: 0.6rem 0;
+  color: #0f172a;
+  line-height: 1.6;
+}
+
+.tramite-prose strong {
+  font-weight: 800;
+}
+
+.tramite-prose ul,
+.tramite-prose ol {
+  margin: 0.7rem 0 0.7rem 1.2rem;
+}
+
+.tramite-prose li {
+  margin: 0.25rem 0;
+}
+
+.tramite-prose a {
+  color: #1e3a8a;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

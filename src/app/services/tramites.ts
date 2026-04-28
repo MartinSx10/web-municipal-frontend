@@ -13,19 +13,16 @@ export type TramiteItem = {
   order?: number;
   active?: boolean;
 
-  // guía
   place?: string;
   schedule?: string;
   needsAppointment?: boolean;
   modality?: 'presencial' | 'online' | 'mixto';
 
-  // links
-  primaryLabel?: string;
-  primaryUrl?: string;
-  secondaryLabel?: string;
-  secondaryUrl?: string;
+  primaryLabel?: string | null;
+  primaryUrl?: string | null;
+  secondaryLabel?: string | null;
+  secondaryUrl?: string | null;
 
-  // markdown / richtext
   notes?: string;
 };
 
@@ -39,17 +36,13 @@ export class TramitesService {
     const qs =
       `?sort=order:asc&filters[active][$eq]=true` +
       `&pagination[pageSize]=${limit}`;
-
     return this.http.get<any>(`${this.baseUrl}${qs}`).pipe(
       map((res) => (res?.data ?? []).map((x: any) => this.mapItem(x)))
     );
   }
 
   getBySlug(slug: string): Observable<TramiteItem | null> {
-    const qs =
-      `?filters[slug][$eq]=${encodeURIComponent(slug)}` +
-      `&pagination[pageSize]=1`;
-
+    const qs = `?filters[slug][$eq]=${encodeURIComponent(slug)}`;
     return this.http.get<any>(`${this.baseUrl}${qs}`).pipe(
       map((res) => {
         const first = (res?.data ?? [])[0];
@@ -59,7 +52,7 @@ export class TramitesService {
   }
 
   private mapItem(x: any): TramiteItem {
-    // tu API viene plano (no attributes), por eso usamos x.title, etc.
+    // Strapi devuelve plano (como el JSON que pegaste)
     return {
       id: x.id,
       title: x.title ?? '',
@@ -73,12 +66,12 @@ export class TramitesService {
       place: x.place ?? '',
       schedule: x.schedule ?? '',
       needsAppointment: x.needsAppointment ?? false,
-      modality: x.modality ?? 'presencial',
+      modality: (x.modality ?? 'presencial') as any,
 
-      primaryLabel: x.primaryLabel ?? '',
-      primaryUrl: x.primaryUrl ?? '',
-      secondaryLabel: x.secondaryLabel ?? '',
-      secondaryUrl: x.secondaryUrl ?? '',
+      primaryLabel: x.primaryLabel ?? null,
+      primaryUrl: x.primaryUrl ?? null,
+      secondaryLabel: x.secondaryLabel ?? null,
+      secondaryUrl: x.secondaryUrl ?? null,
 
       notes: x.notes ?? '',
     };
