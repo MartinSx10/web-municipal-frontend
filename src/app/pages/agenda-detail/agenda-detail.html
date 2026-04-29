@@ -1,0 +1,38 @@
+<section class="max-w-4xl mx-auto px-6 py-10">
+  <a routerLink="/agenda" class="text-sm font-semibold underline underline-offset-4">
+    ← Volver a agenda
+  </a>
+
+  <ng-container *ngIf="(event$ | async) as e; else loading">
+    <div *ngIf="!e" class="mt-6 text-slate-600">
+      Evento no encontrado.
+    </div>
+
+    <div *ngIf="e" class="mt-6">
+      <h1 class="text-3xl font-extrabold text-slate-900">{{ e.title }}</h1>
+      <p class="mt-2 text-slate-600">
+        {{ e.startAt | date:'dd/MM/yyyy HH:mm' }} · 📍 {{ e.location || '—' }}
+      </p>
+
+      <div class="mt-6 rounded-3xl overflow-hidden border border-slate-200 bg-slate-100">
+        <img *ngIf="e.coverUrl" [src]="e.coverUrl" [alt]="e.title" class="w-full h-72 object-cover" />
+        <div *ngIf="!e.coverUrl" class="h-72"></div>
+      </div>
+
+      <p class="mt-6 text-slate-700">
+        {{ e.excerpt || 'Sin descripción.' }}
+      </p>
+
+      <div *ngIf="e.url" class="mt-6">
+        <a [href]="e.url" target="_blank" rel="noopener noreferrer"
+           class="text-sm font-semibold text-blue-900 underline underline-offset-4">
+          Abrir enlace oficial ↗
+        </a>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #loading>
+    <p class="mt-6 text-slate-600">Cargando evento...</p>
+  </ng-template>
+</section>

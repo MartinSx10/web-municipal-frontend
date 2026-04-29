@@ -1,9 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { catchError, of, shareReplay } from 'rxjs';
+import { EventsService, EventItem } from '../../services/events';
 
 @Component({
   selector: 'app-agenda',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './agenda.html',
-  styleUrl: './agenda.css',
+  styleUrls: ['./agenda.css'],
 })
-export class Agenda {}
+export class Agenda {
+  private eventsService = inject(EventsService);
+
+  events$ = this.eventsService.getAll(50).pipe(
+    catchError((err) => {
+      console.error('Error cargando agenda:', err);
+      return of([] as EventItem[]);
+    }),
+    shareReplay(1)
+  );
+
+  // Link “Ver detalle”: externo si tiene url, sino va al detalle interno por id
+  eventLink(e: EventItem) {
+    if (e.url) return { external: true, url: e.url };
+    return { external: false, url: ['/agenda', e.id] };
+  }
+}

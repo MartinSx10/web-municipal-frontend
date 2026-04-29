@@ -10,8 +10,6 @@ import { SecretariaComponent } from './pages/secretaria/secretaria';
 import { TramitesComponent } from './pages/tramites/tramites';
 import { TramiteDetailComponent } from './pages/tramite-detail/tramite-detail';
 
-// si tu agenda es standalone, importala así (ajustá el nombre/clase si es distinto):
-import { Agenda } from './pages/agenda/agenda';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -29,7 +27,10 @@ export const routes: Routes = [
   { path: 'tramites', component: TramitesComponent },
   { path: 'tramites/:slug', component: TramiteDetailComponent },
 
-  { path: 'agenda', component: Agenda },
+
+
+  { path: 'agenda', loadComponent: () => import('./pages/agenda/agenda').then(m => m.Agenda) },
+{ path: 'agenda/:id', loadComponent: () => import('./pages/agenda-detail/agenda-detail').then(m => m.AgendaDetailComponent) },
 
   { path: '**', redirectTo: '' },
 ];

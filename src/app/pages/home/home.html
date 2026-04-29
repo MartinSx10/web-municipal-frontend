@@ -410,26 +410,28 @@
                   {{ e.excerpt || 'Actividad programada por el municipio.' }}
                 </p>
 
-                <div class="mt-5">
-                  <a
-                    *ngIf="e.url; else internalEvent"
-                    [href]="e.url"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="inline-flex items-center gap-2 text-sm font-semibold text-indigo-900 underline underline-offset-4"
-                  >
-                    Ver detalle <span>↗</span>
-                  </a>
+               <!-- ...dentro de tu card... -->
 
-                  <ng-template #internalEvent>
-                    <a
-                      routerLink="/agenda"
-                      class="inline-flex items-center gap-2 text-sm font-semibold text-indigo-900 underline underline-offset-4"
-                    >
-                      Ver detalle <span>→</span>
-                    </a>
-                  </ng-template>
-                </div>
+<div class="mt-5">
+  <a
+    *ngIf="e.url; else internalEvent"
+    [href]="e.url"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="inline-flex items-center gap-2 text-sm font-semibold text-indigo-900 underline underline-offset-4"
+  >
+    Ver detalle <span>↗</span>
+  </a>
+
+  <ng-template #internalEvent>
+    <a
+      [routerLink]="['/agenda', e.id]"
+      class="inline-flex items-center gap-2 text-sm font-semibold text-indigo-900 underline underline-offset-4"
+    >
+      Ver detalle <span>→</span>
+    </a>
+  </ng-template>
+</div>
               </div>
             </div>
           </article>
