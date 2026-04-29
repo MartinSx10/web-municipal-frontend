@@ -18,7 +18,10 @@
   </div>
 
   <ng-container *ngIf="(events$ | async) as events">
-    <div *ngIf="events.length === 0" class="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-6 text-slate-600">
+    <div
+      *ngIf="events.length === 0"
+      class="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-6 text-slate-600"
+    >
       No hay eventos cargados todavía.
     </div>
 
@@ -27,15 +30,25 @@
         *ngFor="let e of events"
         class="rounded-3xl border border-slate-200 bg-white shadow-sm hover:shadow-lg transition overflow-hidden"
       >
-        <div class="relative h-44 bg-slate-200">
-          <img
-            *ngIf="e.coverUrl"
-            [src]="e.coverUrl"
-            [alt]="e.title"
-            class="w-full h-full object-cover"
-            loading="lazy"
-          />
-        </div>
+        <!-- Imagen (coverUrl) -->
+        <a
+          *ngIf="eventLink(e) as link"
+          [routerLink]="!link.external ? link.url : null"
+          [attr.href]="link.external ? link.url : null"
+          [attr.target]="link.external ? '_blank' : null"
+          rel="noopener noreferrer"
+          class="block"
+        >
+          <div class="relative h-44 bg-slate-200">
+            <img
+              *ngIf="e.coverUrl"
+              [src]="e.coverUrl"
+              [alt]="e.title"
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        </a>
 
         <div class="p-6">
           <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
@@ -47,6 +60,7 @@
           </h3>
 
           <p class="mt-2 text-sm text-slate-700">📍 {{ e.location || '—' }}</p>
+
           <p class="mt-3 text-sm text-slate-600">
             {{ e.excerpt || 'Actividad programada por el municipio.' }}
           </p>
@@ -55,7 +69,7 @@
             <ng-container *ngIf="eventLink(e) as link">
               <!-- externo -->
               <a
-                *ngIf="link.external; else internal"
+                *ngIf="link.external; else internalBtn"
                 [href]="link.url"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -65,7 +79,7 @@
               </a>
 
               <!-- interno -->
-              <ng-template #internal>
+              <ng-template #internalBtn>
                 <a
                   [routerLink]="link.url"
                   class="text-sm font-semibold text-blue-900 underline underline-offset-4"

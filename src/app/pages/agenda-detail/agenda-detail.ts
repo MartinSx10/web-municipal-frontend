@@ -15,8 +15,8 @@ export class AgendaDetailComponent {
   private eventsService = inject(EventsService);
 
   event$ = this.route.paramMap.pipe(
-    map((p) => Number(p.get('id'))),
-    switchMap((id) => this.eventsService.getById(id)),
+    map((p) => p.get('documentId') || ''),
+    switchMap((documentId) => this.eventsService.getByDocumentId(documentId)),
     catchError((err) => {
       console.error('Error cargando detalle evento:', err);
       return of(null);

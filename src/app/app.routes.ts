@@ -30,7 +30,7 @@ export const routes: Routes = [
 
 
   { path: 'agenda', loadComponent: () => import('./pages/agenda/agenda').then(m => m.Agenda) },
-{ path: 'agenda/:id', loadComponent: () => import('./pages/agenda-detail/agenda-detail').then(m => m.AgendaDetailComponent) },
+  { path: 'agenda/:documentId', loadComponent: () => import('./pages/agenda-detail/agenda-detail').then(m => m.AgendaDetailComponent) },
 
   { path: '**', redirectTo: '' },
 ];

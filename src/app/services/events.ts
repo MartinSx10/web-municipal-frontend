@@ -5,16 +5,17 @@ import { environment } from '../../environments/environment';
 
 export type EventItem = {
   id: number;
+  documentId: string;
   title: string;
   location?: string;
-  startAt?: string; // ISO
+  startAt?: string;
   endAt?: string | null;
   excerpt?: string;
   url?: string | null;
   order?: number;
   active?: boolean;
 
-  coverUrl?: string | null; // ✅ imagen
+  coverUrl?: string | null;
 };
 
 @Injectable({ providedIn: 'root' })
@@ -23,60 +24,77 @@ export class EventsService {
 
   constructor(private http: HttpClient) {}
 
-  // Lista para Home (próximos)
+  // Para Home (próximos)
   getUpcoming(limit = 4): Observable<EventItem[]> {
     const qs =
-      `?sort=order:asc` +
-      `&filters[active][$eq]=true` +
+      `?sort=order:asc&filters[active][$eq]=true` +
       `&pagination[pageSize]=${limit}` +
-      `&populate=cover`; // ✅ traer imagen
+      `&populate=*`;
 
     return this.http.get<any>(`${this.baseUrl}${qs}`).pipe(
       map((res) => (res?.data ?? []).map((x: any) => this.mapItem(x)))
     );
   }
 
-  // Lista completa para /agenda
+  // Para /agenda (lista completa)
   getAll(limit = 50): Observable<EventItem[]> {
     const qs =
-      `?sort=startAt:asc` +
-      `&filters[active][$eq]=true` +
+      `?sort=StartAt:asc&filters[active][$eq]=true` +
       `&pagination[pageSize]=${limit}` +
-      `&populate=cover`;
+      `&populate=*`;
 
     return this.http.get<any>(`${this.baseUrl}${qs}`).pipe(
       map((res) => (res?.data ?? []).map((x: any) => this.mapItem(x)))
     );
   }
 
-  // ✅ detalle por ID (para /agenda/:id)
+  // ✅ Detalle (Strapi v5): por documentId
+  getByDocumentId(documentId: string): Observable<EventItem | null> {
+    return this.http
+      .get<any>(`${this.baseUrl}/${encodeURIComponent(documentId)}?populate=*`)
+      .pipe(map((res) => (res?.data ? this.mapItem(res.data) : null)));
+  }
+
+  // (Opcional) Plan B por id numérico (si alguna vez el backend no acepta documentId)
   getById(id: number): Observable<EventItem | null> {
-    const qs = `?populate=cover`;
-    return this.http.get<any>(`${this.baseUrl}/${id}${qs}`).pipe(
-      map((res) => (res?.data ? this.mapItem(res.data) : null))
-    );
+    return this.http
+      .get<any>(`${this.baseUrl}/${id}?populate=*`)
+      .pipe(map((res) => (res?.data ? this.mapItem(res.data) : null)));
   }
 
   private mapItem(x: any): EventItem {
-    // Strapi puede venir "plano" o con attributes, cubrimos ambos:
-    const a = x?.attributes ? { id: x.id, ...x.attributes } : x;
+    // cover puede ser array (multiple) o objeto (single)
+    const cover = Array.isArray(x.cover) ? x.cover[0] : x.cover;
 
-    const cover = a?.cover?.data;
-    const coverUrl = cover?.attributes?.url
-      ? `${environment.apiUrl}${cover.attributes.url}`
-      : null;
+    const rawUrl =
+      cover?.formats?.large?.url ??
+      cover?.formats?.medium?.url ??
+      cover?.formats?.small?.url ??
+      cover?.formats?.thumbnail?.url ??
+      cover?.url ??
+      null;
+
+    const coverUrl = rawUrl ? this.absoluteUrl(rawUrl) : null;
 
     return {
-      id: a.id,
-      title: a.title ?? '',
-      location: a.location ?? '',
-      startAt: a.startAt ?? a.StartAt ?? '',
-      endAt: a.endAt ?? a.EndAt ?? null,
-      excerpt: a.excerpt ?? '',
-      url: a.url ?? null,
-      order: a.order ?? 0,
-      active: a.active ?? true,
+      id: x.id,
+      documentId: x.documentId ?? '',
+      title: x.title ?? '',
+      location: x.location ?? '',
+      // ✅ tu Strapi devuelve StartAt/EndAt (con mayúscula)
+      startAt: x.StartAt ?? x.startAt ?? '',
+      endAt: x.EndAt ?? x.endAt ?? null,
+      excerpt: x.excerpt ?? '',
+      url: x.url ?? null,
+      order: x.order ?? 0,
+      active: x.active ?? true,
       coverUrl,
     };
+  }
+
+  private absoluteUrl(url: string): string {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    return `${environment.apiUrl}${url}`;
   }
 }
