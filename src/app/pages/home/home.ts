@@ -54,7 +54,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       subtitle: 'Bajemos la velocidad para cuidarnos más.',
       imageUrl: 'assets/campanias/prevencion-vial.jpg',
       alt: 'Campaña de prevención vial',
-      linkUrl: null,
+      linkUrl: '/noticias',
       external: false,
     },
     {
@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       subtitle: 'Vacunación y controles preventivos para la comunidad.',
       imageUrl: 'assets/campanias/salud.jpg',
       alt: 'Campaña de salud',
-      linkUrl: '/agenda',
+      linkUrl: '/noticias',
       external: false,
     },
     {
@@ -79,7 +79,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private campaignInterval: ReturnType<typeof setInterval> | null = null;
 
   // 1) Noticias
-  latest$: Observable<NewsItem[]> = this.newsService.getLatest(6).pipe(
+  latest$: Observable<NewsItem[]> = this.newsService.getLatest(4).pipe(
     catchError((err) => {
       console.error('Error cargando últimas noticias:', err);
       return of([] as NewsItem[]);

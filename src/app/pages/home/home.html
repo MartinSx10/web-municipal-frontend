@@ -60,7 +60,8 @@
     src="assets/banner.webp"
     alt="Banner institucional"
     class="absolute inset-0 w-full h-full object-cover object-top"
-    loading="lazy"
+    loading="eager"
+    fetchpriority="high"
   />
 
   <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/70"></div>
@@ -317,28 +318,29 @@
     </div>
   </section>
 
-<!-- 4) CAMPAÑAS / PREVENCIÓN (slider automático) -->
+<!-- 4) CAMPAÑAS / PREVENCIÓN (slider automático, solo imagen) -->
 <section class="bg-white border-y border-slate-100">
   <div class="max-w-6xl mx-auto px-6 py-14">
     <div class="rounded-[32px] border border-slate-200 bg-white shadow-sm overflow-hidden">
       <!-- header -->
       <div class="px-6 py-6 sm:px-8 sm:py-8 border-b border-slate-200 bg-slate-50/70">
-        <p class="text-sm font-semibold uppercase tracking-[0.18em] text-blue-700">
-          Campañas municipales
-        </p>
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2">
-          Publicidad y prevención
-        </h2>
-        <p class="text-slate-600 mt-2 text-sm sm:text-base max-w-2xl">
-          Información útil, campañas de concientización y acciones de prevención.
-        </p>
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-[0.18em] text-blue-700">
+            Campañas municipales
+          </p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2">
+            Publicidad y prevención
+          </h2>
+          <p class="text-slate-600 mt-2 text-sm sm:text-base max-w-2xl">
+            Información útil, campañas de concientización y acciones de prevención.
+          </p>
+        </div>
       </div>
 
       <!-- slider -->
       <div class="p-4 sm:p-6">
         <div
-          class="relative overflow-hidden rounded-3xl border border-slate-200 bg-slate-100
-                 h-56 sm:h-72 md:h-80"
+          class="relative overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 h-[260px] sm:h-[340px] md:h-[420px]"
           (mouseenter)="stopCampaignAutoplay()"
           (mouseleave)="startCampaignAutoplay()"
         >
@@ -347,109 +349,60 @@
             class="absolute inset-0 transition-opacity duration-700"
             [ngClass]="i === currentCampaign ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'"
           >
-            <!-- Fondo “blur” para llenar y que no se vea vacío -->
-            <div class="absolute inset-0">
-              <img
-                [src]="slide.imageUrl"
-                alt=""
-                class="w-full h-full object-cover scale-110 blur-xl opacity-45"
-                loading="lazy"
-                aria-hidden="true"
-              />
-              <div class="absolute inset-0 bg-white/20"></div>
-            </div>
-
-            <!-- Imagen principal (NO se corta) -->
-            <div class="absolute inset-0 flex items-center justify-center">
+            <!-- si tiene link -->
+            <a
+              *ngIf="slide.linkUrl; else noLinkSlide"
+              class="block w-full h-full"
+              [attr.href]="slide.external ? slide.linkUrl : null"
+              [routerLink]="!slide.external ? slide.linkUrl : null"
+              [attr.target]="slide.external ? '_blank' : null"
+              rel="noopener noreferrer"
+              aria-label="Abrir campaña"
+            >
               <img
                 [src]="slide.imageUrl"
                 [alt]="slide.alt"
                 class="w-full h-full object-contain"
                 loading="lazy"
               />
-            </div>
+            </a>
 
-            <!-- Overlay para legibilidad (suave, tipo institucional) -->
-            <div class="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-transparent"></div>
-
-            <!-- Zona segura (texto dentro de contenedor) -->
-            <div class="absolute inset-0">
-              <div class="max-w-6xl mx-auto px-6 h-full flex items-end">
-                <div class="pb-6 sm:pb-8 text-white max-w-3xl">
-                  <p class="text-xs sm:text-sm uppercase tracking-[0.18em] font-semibold text-white/80">
-                    Municipalidad Dpto San Martín
-                  </p>
-
-                  <h3 class="mt-2 text-2xl sm:text-3xl md:text-4xl font-extrabold leading-tight">
-                    {{ slide.title }}
-                  </h3>
-
-                  <p
-                    *ngIf="slide.subtitle"
-                    class="mt-2 text-sm sm:text-base md:text-lg text-white/90"
-                  >
-                    {{ slide.subtitle }}
-                  </p>
-
-                  <!-- Link (interno o externo) -->
-                  <ng-container *ngIf="slide.linkUrl">
-                    <!-- Externo -->
-                    <a
-                      *ngIf="slide.external; else internalLink"
-                      [href]="slide.linkUrl"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="mt-4 inline-flex items-center gap-2 rounded-full bg-white text-slate-900 px-4 py-2 text-sm font-semibold hover:opacity-95"
-                    >
-                      Ver más <span>↗</span>
-                    </a>
-
-                    <!-- Interno -->
-                    <ng-template #internalLink>
-                      <a
-                        [routerLink]="slide.linkUrl"
-                        class="mt-4 inline-flex items-center gap-2 rounded-full bg-white text-slate-900 px-4 py-2 text-sm font-semibold hover:opacity-95"
-                      >
-                        Ver más <span>→</span>
-                      </a>
-                    </ng-template>
-                  </ng-container>
-                </div>
-              </div>
-            </div>
+            <!-- si NO tiene link -->
+            <ng-template #noLinkSlide>
+              <img
+                [src]="slide.imageUrl"
+                [alt]="slide.alt"
+                class="w-full h-full object-contain"
+                loading="lazy"
+              />
+            </ng-template>
           </div>
 
-          <!-- flecha izquierda (discreta) -->
+          <!-- flecha izquierda -->
           <button
             type="button"
             (click)="prevCampaign()"
-            class="absolute left-3 top-1/2 -translate-y-1/2 z-20
-                   w-10 h-10 rounded-full bg-white/80 backdrop-blur
-                   border border-white/60 text-slate-900 shadow
-                   hover:bg-white hover:scale-105 transition"
+            class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 border border-slate-200 text-slate-900 shadow hover:scale-105 transition"
             aria-label="Anterior"
           >
             ←
           </button>
 
-          <!-- flecha derecha (discreta) -->
+          <!-- flecha derecha -->
           <button
             type="button"
             (click)="nextCampaign()"
-            class="absolute right-3 top-1/2 -translate-y-1/2 z-20
-                   w-10 h-10 rounded-full bg-white/80 backdrop-blur
-                   border border-white/60 text-slate-900 shadow
-                   hover:bg-white hover:scale-105 transition"
+            class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 border border-slate-200 text-slate-900 shadow hover:scale-105 transition"
             aria-label="Siguiente"
           >
             →
           </button>
         </div>
 
-        <!-- indicadores (dots) -->
+        <!-- indicadores -->
         <div class="mt-4 flex items-center justify-center gap-2">
           <button
-            *ngFor="let _ of campaignSlides; let i = index"
+            *ngFor="let slide of campaignSlides; let i = index"
             type="button"
             (click)="goToCampaign(i)"
             class="h-2.5 rounded-full transition-all"
